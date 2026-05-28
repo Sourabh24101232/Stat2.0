@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import carDetails from './pages/CarDetails'
 import Cars from './pages/Cars'
 import MyBookings from './pages/MyBookings'
+import Footer from './components/Footer'
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/my-bookings' element={<MyBookings/>}/>
       </Routes>
 
+      {!isOwnerPath && <Footer/>}
     </>
   )
 }
