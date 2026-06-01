@@ -14,17 +14,21 @@ import Dashboard from './pages/owner/Dashboard'
 import AddCar from './pages/owner/AddCar'
 import ManageCars from './pages/owner/ManageCars'
 import ManageBookings from './pages/owner/ManageBookings'
+import Login from './components/Login'
 
 const App = () => {
 
+  //showLogin → stores whether the login popup is visible
   const [showLogin, setShowLogin] = useState(false)
   const isOwnerPath = useLocation().pathname.startsWith('/owner')
 
   return (
     <>
-
       {/* Conditional Navbar */}
       {!isOwnerPath && <Navbar setShowLogin={setShowLogin} />}
+
+      {/* to display the Login component only when showLogin=true */}
+      {showLogin && <Login setShowLogin={setShowLogin}/>}
 
       <Routes>
 
