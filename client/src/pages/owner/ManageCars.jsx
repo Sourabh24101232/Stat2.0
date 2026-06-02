@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { dummyCarData } from '../../assets/assets'
 import Title from '../../components/owner/Title'
 import { assets } from '../../assets/assets'
 
 const ManageCars = () => {
   const currency = import.meta.env.VITE_CURRENCY
-  const [cars, setCars] = useState([])
-
-  //runs only once
-  const fetchOwnerCars = async () => {
-    setCars(dummyCarData)
-  }
-
-  useEffect(() => {
-    fetchOwnerCars()
-  }, [])
+  const cars = dummyCarData
 
   return (
-    <div className='px-4 pt-10 md:px-10 w-full'>
+    <div className='w-full px-4 pt-10 md:px-10'>
 
       <Title title="Manage Cars" subTitle="View all listed cars, update their details, or remove them from the booking platform." />
 
-      <div className='max-w-3xl w-full rounded-md overflow-hidden border border-borderColor mt-6'>
+      <div className='mt-6 w-full max-w-3xl overflow-hidden rounded-md border border-borderColor dark:border-gray-700'>
 
-        <table className='w-full border-collapse text-left text-sm text-gray-600'>
-          <thead className='text-gray-500'>
+        <table className='w-full border-collapse text-left text-sm text-gray-600 dark:text-gray-300'>
+          <thead className='text-gray-500 dark:text-gray-400'>
 
             <tr>
               <th className='p-3 font-medium'>Car</th>
@@ -39,7 +30,7 @@ const ManageCars = () => {
           <tbody>
 
             {cars.map((car, index) => (
-              <tr key={index} className='border-t border-borderColor'>
+              <tr key={index} className='border-t border-borderColor dark:border-gray-700'>
 
                 <td className='p-3'>
                   <div className='flex items-center gap-3'>
@@ -48,7 +39,7 @@ const ManageCars = () => {
 
                     <div className='max-md:hidden'>
                       <p className='font-medium'> {car.brand} {car.model}</p>
-                      <p className='text-xs text-gray-500'>{car.seating_capacity} • {car.transmission}</p>
+                      <p className='text-xs text-gray-500 dark:text-gray-400'>{car.seating_capacity} - {car.transmission}</p>
                     </div>
 
                   </div>
@@ -58,7 +49,7 @@ const ManageCars = () => {
                 <td className='p-3'> {currency} {car.pricePerDay}/day </td>
 
                 <td className='p-3 max-md:hidden'>
-                  <span className={`px-3 py-1 rounded-full text-xs ${car.isAvailable ? 'bg-green-100 text-green-500' : 'bg-red-100 text-red-500'}`} > {car.isAvailable ? "Available" : "Unavailable"}</span>
+                  <span className={`rounded-full px-3 py-1 text-xs ${car.isAvailable ? 'bg-green-100 text-green-500 dark:bg-green-400/15' : 'bg-red-100 text-red-500 dark:bg-red-400/15'}`} > {car.isAvailable ? "Available" : "Unavailable"}</span>
                 </td>
 
                 <td className='p-3'>

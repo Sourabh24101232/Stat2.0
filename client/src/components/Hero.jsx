@@ -7,7 +7,7 @@ const Hero = () => {
   const [pickupLocation, setPickupLocation] = useState('')
 
   return (
-    <div className='h-screen flex flex-col items-center justify-center gap-14 bg-light text-center'>
+    <div className='h-screen flex flex-col items-center justify-center gap-14 bg-light text-center transition-colors dark:bg-gray-950'>
 
       {/* Heading */}
       <h1 className='text-4xl md:text-5xl font-semibold'>
@@ -15,14 +15,14 @@ const Hero = () => {
       </h1>
 
       {/* Selection Form */}
-      <form action="" className='flex flex-col md:flex-row items-start md:items-center justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0px_8px_20px_rgba(0,0,0,0.1)] dark:border dark:border-slate-600'>
+      <form action="" className='flex flex-col md:flex-row items-start md:items-center justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0px_8px_20px_rgba(0,0,0,0.1)] transition-colors dark:border dark:border-slate-600 dark:bg-gray-800 dark:shadow-[0px_8px_24px_rgba(0,0,0,0.35)]'>
 
         <div className='flex flex-col md:flex-row items-start md:items-center gap-10 min-md:ml-8'>
 
           {/* For pickupLocations */}
           <div className='flex flex-col items-start gap-2'>
             {/* Dropdown to show list of pickupLocations */}
-            <select required value={pickupLocation} onChange={(e) => setPickupLocation(e.target.value)}>
+            <select required value={pickupLocation} onChange={(e) => setPickupLocation(e.target.value)} className='bg-transparent outline-none dark:text-gray-200'>
               <option value="">PickUp Location</option>
               {cityList.map((city) => <option key={city} value={city}>{city}</option>)}
             </select>
@@ -33,13 +33,13 @@ const Hero = () => {
           {/* For pickUp date */}
           <div className='flex flex-col items-start gap-2'>
             <label htmlFor="pickup-date" >Pick-up-Date</label>
-            <input type="date" id='pickup-date' min={new Date().toISOString().split('T')[0]} className='hero-date-input text-sm text-gray-500' required />
+            <input type="date" id='pickup-date' min={new Date().toISOString().split('T')[0]} className='hero-date-input bg-transparent text-sm text-gray-500 outline-none dark:text-gray-400' required />
           </div>
 
           {/* For return date */}
           <div className='flex flex-col items-start gap-2'>
             <label htmlFor="return-date" >Return Date</label>
-            <input type="date" id='return-date' className='hero-date-input text-sm text-gray-500' required />
+            <input type="date" id='return-date' className='hero-date-input bg-transparent text-sm text-gray-500 outline-none dark:text-gray-400' required />
           </div>
 
         </div>

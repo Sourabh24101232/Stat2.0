@@ -13,63 +13,8 @@ body{
     color: #111827;
 }
 
-.dark body{
-    background: #111827;
-    color: #e5e7eb;
-}
-
 #root{
     min-height: 100vh;
-}
-
-.dark .bg-white,
-.dark .bg-light{
-    background-color: #111827 !important;
-}
-
-.dark .bg-gray-50,
-.dark .bg-gray-100,
-.dark .bg-gray-500\/10{
-    background-color: #1f2937 !important;
-}
-
-.dark .text-gray-900,
-.dark .text-gray-800,
-.dark .text-gray-700,
-.dark .text-gray-600{
-    color: #e5e7eb !important;
-}
-
-.dark .text-gray-500,
-.dark .text-gray-500\/90,
-.dark .text-gray-500\/80,
-.dark .text-gray-500\/70,
-.dark .text-gray-400{
-    color: #9ca3af !important;
-}
-
-.dark .border-borderColor,
-.dark .border-gray-300,
-.dark .border-gray-300\/60{
-    border-color: #374151 !important;
-}
-
-.dark input,
-.dark select,
-.dark textarea{
-    color: #e5e7eb;
-    background-color: transparent;
-}
-
-.dark input::placeholder,
-.dark textarea::placeholder{
-    color: #9ca3af;
-}
-
-.dark .shadow,
-.dark .shadow-lg,
-.dark .shadow-xl{
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
 }
 
 @theme{

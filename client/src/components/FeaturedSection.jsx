@@ -23,7 +23,7 @@ const FeaturedSection = () => {
 
             <button
                 onClick={() => { navigate('/cars'); window.scrollTo(0, 0); }}
-                className="flex items-center justify-center gap-2 px-6 py-2 border border-borderColor hover:bg-gray-50 rounded-md mt-18 cursor-pointer">
+                className="mt-18 flex cursor-pointer items-center justify-center gap-2 rounded-md border border-borderColor px-6 py-2 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800">
                 Explore all cars
                 <img src={assets.arrow_icon} alt="arrow" />
             </button>

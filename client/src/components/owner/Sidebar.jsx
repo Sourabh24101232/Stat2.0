@@ -18,7 +18,7 @@ const Sidebar = () => {
     return (
 
         // Sidebar
-        <div className="relative min-h-screen md:flex flex-col items-center pt-8 max-w-13 md:max-w-60 w-full border-r border-borderColor text-sm">
+        <div className="relative min-h-screen w-full max-w-13 flex-col items-center border-r border-borderColor pt-8 text-sm dark:border-gray-700 md:flex md:max-w-60">
 
             {/*Profile Section */}
             <div className="group relative">
@@ -48,7 +48,7 @@ const Sidebar = () => {
             {/* Navigation Links */}
             <div className="w-full">
                 {ownerMenuLinks.map((link, index) => (
-                    <NavLink key={index} to={link.path} className={`relative flex items-center gap-2 w-full py-3 pl-4 first:mt-6 ${link.path === location.pathname ? "bg-primary/10 text-primary" : "text-gray-600"}`} >
+                    <NavLink key={index} to={link.path} className={`relative flex w-full items-center gap-2 py-3 pl-4 first:mt-6 ${link.path === location.pathname ? "bg-primary/10 text-primary" : "text-gray-600 dark:text-gray-300"}`} >
                         {/* Current page Shows colored icon, Other pages Shows normal icon */}
                         <img src={link.path === location.pathname ? link.coloredIcon : link.icon} alt="car icon" />
                         <span className="max-md:hidden">{link.name}</span>

@@ -1,20 +1,12 @@
 import React from 'react'
 import { assets } from '../../assets/assets';
-import { useState, useEffect } from 'react';
 import { dummyDashboardData } from '../../assets/assets';
 import Title from '../../components/owner/Title';
 
 const Dashboard = () => {
 
   const currency = import.meta.env.VITE_CURRENCY
-  const [data, setData] = useState({
-    totalCars: 0,
-    totalBookings: 0,
-    pendingBookings: 0,
-    completedBookings: 0,
-    recentBookings: [],
-    monthlyRevenue: 0,
-  });
+  const data = dummyDashboardData;
 
   const dashboardCards = [
     { title: "Total Cars", value: data.totalCars, icon: assets.carIconColored, },
@@ -22,11 +14,6 @@ const Dashboard = () => {
     { title: "Pending", value: data.pendingBookings, icon: assets.cautionIconColored, },
     { title: "Confirmed", value: data.completedBookings, icon: assets.listIconColored, },
   ];
-
-  //Run the effect only once after the component's first render
-  useEffect(() => {
-    setData(dummyDashboardData);
-  }, []);
 
   return (
     <div className='px-4 pt-10 md:px-10 flex-1'>
@@ -37,10 +24,10 @@ const Dashboard = () => {
 
       <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-8 max-w-3xl'>
         {dashboardCards.map((card, index) => (
-          <div key={index} className='flex gap-2 items-center justify-between p-4 rounded-md border border-borderColor'>
+          <div key={index} className='flex items-center justify-between gap-2 rounded-md border border-borderColor p-4 dark:border-gray-700 dark:bg-gray-800'>
 
             <div>
-              <h1 className='text-xs text-gray-500'>{card.title}</h1>
+              <h1 className='text-xs text-gray-500 dark:text-gray-400'>{card.title}</h1>
               <p className='text-lg font-semibold'>{card.value}</p>
             </div>
 
@@ -55,9 +42,9 @@ const Dashboard = () => {
       <div className='flex flex-wrap items-start gap-6 mb-8 w-full'>
 
         {/* recent booking */}
-        <div className='p-4 md:p-6 border border-borderColor rounded-md max-w-lg w-full'>
+        <div className='w-full max-w-lg rounded-md border border-borderColor p-4 dark:border-gray-700 dark:bg-gray-800 md:p-6'>
           <h1 className='text-lg font-medium'>Recent Bookings</h1>
-          <p className='text-gray-600'>Latest customer bookings</p>
+          <p className='text-gray-600 dark:text-gray-400'>Latest customer bookings</p>
 
           {data.recentBookings.map((booking, index) => (
             <div key={index} className='mt-4 flex items-center justify-between'>
@@ -69,13 +56,13 @@ const Dashboard = () => {
 
                 <div>
                   <p>{booking.car.brand} {booking.car.model}</p>
-                  <p className='text-sm text-gray-500'>{booking.createdAt.split('T')[0]}</p>
+                  <p className='text-sm text-gray-500 dark:text-gray-400'>{booking.createdAt.split('T')[0]}</p>
                 </div>
               </div>
 
               <div className='flex items-center gap-2 font-medium'>
-                <p className='text-sm text-gray-500'> {currency}{booking.price}  </p>
-                <p className='px-3 py-0.5 border border-borderColor rounded-full text-sm'> {booking.status} </p>
+                <p className='text-sm text-gray-500 dark:text-gray-400'> {currency}{booking.price}  </p>
+                <p className='rounded-full border border-borderColor px-3 py-0.5 text-sm dark:border-gray-700'> {booking.status} </p>
               </div>
 
             </div>
@@ -83,9 +70,9 @@ const Dashboard = () => {
         </div>
 
         {/* monthly revenue */}
-        <div className='p-4 md:p-6 mb-6 border border-borderColor rounded-md w-full md:max-w-xs bg-white'>
+        <div className='mb-6 w-full rounded-md border border-borderColor bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:max-w-xs md:p-6'>
           <h1 className='text-lg font-medium'>Monthly Revenue</h1>
-          <p className='text-gray-500'>Revenue for current month</p>
+          <p className='text-gray-500 dark:text-gray-400'>Revenue for current month</p>
           <p className='text-3xl mt-6 font-semibold text-blue-600'> {currency}{data.monthlyRevenue}</p>
         </div>
 

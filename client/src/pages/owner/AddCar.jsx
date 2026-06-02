@@ -5,6 +5,7 @@ import { assets } from '../../assets/assets';
 
 const AddCar = () => {
   const currency = import.meta.env.VITE_CURRENCY;
+  const fieldClass = 'px-3 py-2 mt-1 border border-borderColor rounded-md outline-none bg-transparent text-gray-700 placeholder-gray-500 dark:border-gray-700 dark:text-gray-200 dark:placeholder-gray-400';
   const [image, setImage] = useState(null);
   const [car, setCar] = useState({
     brand: '',
@@ -23,7 +24,7 @@ const AddCar = () => {
     e.preventDefault;
   }
 
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoading = false;
 
 
   return (
@@ -32,7 +33,7 @@ const AddCar = () => {
       {/* Use owner title component */}
       <Title title="Add New Car" subTitle="Fill in details to list a new car for booking, including pricing, availability, and car specifications." />
 
-      <form onSubmit={onSubmitHandler} className='flex flex-col gap-5 text-gray-500 text-sm mt-6 max-w-xl'>
+      <form onSubmit={onSubmitHandler} className='mt-6 flex max-w-xl flex-col gap-5 text-sm text-gray-500 dark:text-gray-400'>
 
         {/* Car Image */}
         <div className='flex items-center gap-2 w-full'>
@@ -42,7 +43,7 @@ const AddCar = () => {
             <input type="file" id="car-image" accept="image/*" hidden onChange={e => setImage(e.target.files[0])} />
           </label>
 
-          <p className='text-sm text-gray-500'>Upload a picture of your car</p>
+          <p className='text-sm text-gray-500 dark:text-gray-400'>Upload a picture of your car</p>
         </div>
 
         {/* car Brand and Model */}
@@ -50,12 +51,12 @@ const AddCar = () => {
 
           <div className='flex flex-col w-full'>
             <label>Brand</label>
-            <input type="text" placeholder="e.g. BMW, Mercedes, Audi..." required className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' value={car.brand} onChange={e => setCar({ ...car, brand: e.target.value })} />
+            <input type="text" placeholder="e.g. BMW, Mercedes, Audi..." required className={fieldClass} value={car.brand} onChange={e => setCar({ ...car, brand: e.target.value })} />
           </div>
 
           <div className='flex flex-col w-full'>
             <label>Model</label>
-            <input type="text" placeholder="e.g. X5 , E-CLASS , M4 ..." required className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' value={car.model} onChange={e => setCar({ ...car, model: e.target.value })} />
+            <input type="text" placeholder="e.g. X5 , E-CLASS , M4 ..." required className={fieldClass} value={car.model} onChange={e => setCar({ ...car, model: e.target.value })} />
           </div>
 
         </div>
@@ -65,17 +66,17 @@ const AddCar = () => {
 
           <div className='flex flex-col w-full'>
             <label>Year</label>
-            <input type="number" placeholder="2025" required className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' value={car.year} onChange={e => setCar({ ...car, year: e.target.value })} />
+            <input type="number" placeholder="2025" required className={fieldClass} value={car.year} onChange={e => setCar({ ...car, year: e.target.value })} />
           </div>
 
           <div className='flex flex-col w-full'>
             <label>Daily Price ({currency})</label>
-            <input type="number" placeholder="100" required className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' value={car.pricePerDay} onChange={e => setCar({ ...car, pricePerDay: e.target.value })} />
+            <input type="number" placeholder="100" required className={fieldClass} value={car.pricePerDay} onChange={e => setCar({ ...car, pricePerDay: e.target.value })} />
           </div>
 
           <div className='flex flex-col w-full'>
             <label>Category</label>
-            <select onChange={e => setCar({ ...car, category: e.target.value })} value={car.category} className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' >
+            <select onChange={e => setCar({ ...car, category: e.target.value })} value={car.category} className={fieldClass} >
               <option value="">Select a Category</option>
               <option value="Sedan">Sedan</option>
               <option value="SUV">SUV</option>
@@ -90,7 +91,7 @@ const AddCar = () => {
 
           <div className='flex flex-col w-full'>
             <label>Transmission</label>
-            <select onChange={e => setCar({ ...car, transmission: e.target.value })} value={car.transmission} className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none'>
+            <select onChange={e => setCar({ ...car, transmission: e.target.value })} value={car.transmission} className={fieldClass}>
               <option value="">Select a transmission</option>
               <option value="Automatic">Automatic</option>
               <option value="Manual">Manual</option>
@@ -100,7 +101,7 @@ const AddCar = () => {
 
           <div className='flex flex-col w-full'>
             <label>Fuel Type</label>
-            <select onChange={e => setCar({ ...car, fuel_type: e.target.value })} value={car.fuel_type} className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none'>
+            <select onChange={e => setCar({ ...car, fuel_type: e.target.value })} value={car.fuel_type} className={fieldClass}>
               <option value="">Select a Fuel Type </option>
               <option value="Gas">Gas</option>
               <option value="Diesel">Diesel</option>
@@ -112,7 +113,7 @@ const AddCar = () => {
 
           <div className='flex flex-col w-full'>
             <label>Seating Capacity</label>
-            <input type="number" placeholder="4" required className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' value={car.seating_capacity} onChange={e => setCar({ ...car, seating_capacity: e.target.value })} />
+            <input type="number" placeholder="4" required className={fieldClass} value={car.seating_capacity} onChange={e => setCar({ ...car, seating_capacity: e.target.value })} />
           </div>
 
         </div>
@@ -120,7 +121,7 @@ const AddCar = () => {
         {/* Car Location */}
         <div className='flex flex-col w-full'>
           <label>Location</label>
-          <select onChange={e => setCar({ ...car, location: e.target.value })} value={car.location} className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none'>
+          <select onChange={e => setCar({ ...car, location: e.target.value })} value={car.location} className={fieldClass}>
             <option value="">Select a location</option>
             <option value="New York">New York</option>
             <option value="Los Angeles">Los Angeles</option>
@@ -136,7 +137,7 @@ const AddCar = () => {
             rows={5}
             placeholder="e.g. A luxurious SUV with a spacious interior and a powerful engine."
             required
-            className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none'
+            className={fieldClass}
             value={car.description}
             // Update only the description field while preserving other car properties
             onChange={e => setCar({ ...car, description: e.target.value })}

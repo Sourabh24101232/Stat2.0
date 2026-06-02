@@ -23,12 +23,12 @@ const App = () => {
   const isOwnerPath = useLocation().pathname.startsWith('/owner')
 
   return (
-    <>
+    <div className="min-h-screen bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-200">
       {/* Conditional Navbar */}
       {!isOwnerPath && <Navbar setShowLogin={setShowLogin} />}
 
       {/* to display the Login component only when showLogin=true */}
-      {showLogin && <Login setShowLogin={setShowLogin}/>}
+      {showLogin && <Login setShowLogin={setShowLogin} />}
 
       <Routes>
 
@@ -52,7 +52,7 @@ const App = () => {
 
       {/* Conditional Footer */}
       {!isOwnerPath && <Footer />}
-    </>
+    </div>
   )
 }
 
