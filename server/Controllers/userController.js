@@ -2,9 +2,10 @@ import User from "../models/UserModel.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-//function to generate jwt token
+// function to generate jwt token
 const generateToken = (userId) => {
-    const payload = userId;
+    // Wrap the string in an object
+    const payload = { id: userId }; 
     return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
 }
 
@@ -50,26 +51,37 @@ export const loginUser = async (req, res) => {
     try {
 
         const { email, password } = req.body;
-        const user = await User.findOne({ email });// Check if user exists in database using email
+        const user = await User.findOne({ email })// Check if user exists in database using email
 
         // If no user found, stop execution
         if (!user) {
-            return res.json({ success: false, message: "User not found" });
+            return res.json({ success: false, message: "User not found" })
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);// Compare entered password with hashed password stored in DB
+        const isMatch = await bcrypt.compare(password, user.password)// Compare entered password with hashed password stored in DB
         if (!isMatch) {
-            return res.json({ success: false, message: "Invalid Credentials" });// If password does not match, deny login
+            return res.json({ success: false, message: "Invalid Credentials" })// If password does not match, deny login
         }
 
         //generate authentication token using user's ID and Secret key and give to the user to store in frontend and bring with every future requests
-        const token = generateToken(user._id.toString());
+        const token = generateToken(user._id.toString())
         // Send success response with JWT token
-        res.json({ success: true, token });
+        res.json({ success: true, token })
 
     } catch (error) {
         console.log(error.message);
-        res.json({ success: false, message: error.message });
+        res.json({ success: false, message: error.message })
     }
 
 };
+
+//get user data  using token (JWT) and protect middleware
+export const getUserData = async (req, res) => {
+    try {
+        const user = req.user
+        res.json({ success: true, user })
+    } catch (error) {
+        console.log(error.message)
+        res.json({ success: false, message: error.message })
+    }
+}
