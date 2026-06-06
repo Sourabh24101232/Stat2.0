@@ -2,6 +2,8 @@ import User from "../models/UserModel.js";
 import fs from 'fs'
 import imagekit from "../configs/imagekit.js";
 import Car from "../models/CarModel.js";
+import Booking from "../models/BookingModel.js";
+
 
 //controller function to change role of user
 export const changeRoleToOwner = async (req, res) => {
@@ -139,17 +141,17 @@ export const getDashboardData = async (req, res) => {
         const { _id, role } = req.user;
         if (role !== 'owner') return res.json({ success: false, message: "Unauthorized" })
 
+        //find cars
         const cars = await Car.find({ owner: _id })
 
+        //get booking datas
         const bookings = await Booking.find({ owner: _id })
             .populate("car")
             .sort({ createdAt: -1 });//Newest bookings first
-
         const pendingBookings = await Booking.find({
             owner: _id,
             status: "pending",
         });
-
         const completedBookings = await Booking.find({
             owner: _id,
             status: "confirmed",
@@ -176,3 +178,39 @@ export const getDashboardData = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+//controller function to update profile image
+export const updateUserImage = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const imageFile = req.file;
+
+        // Upload Image to ImageKit
+        const fileBuffer = fs.readFileSync(imageFile.path);
+
+        const response = await imagekit.upload({
+            file: fileBuffer,
+            fileName: imageFile.originalname,
+            folder: "/users",
+        });
+
+        // optimization through imagekit URL transformation
+        const optimizedImageUrl = imagekit.url({
+            path: response.filePath,
+            transformation: [
+                { width: "400" }, // Width resizing
+                { quality: "auto" }, // Auto compression
+                { format: "webp" }, // Convert to modern format
+            ],
+        });
+
+        const image = optimizedImageUrl;
+
+        await User.findByIdAndUpdate(_id, { image });
+
+        res.json({ success: true, message: "Image Updated" });
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
+    }
+};
