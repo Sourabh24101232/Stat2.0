@@ -16,6 +16,7 @@ import ManageCars from './pages/owner/ManageCars'
 import ManageBookings from './pages/owner/ManageBookings'
 import Login from './components/Login'
 
+import { Toaster } from 'react-hot-toast'
 const App = () => {
 
   //showLogin → stores whether the login popup is visible
@@ -24,6 +25,9 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-200">
+
+      <Toaster />
+
       {/* Conditional Navbar */}
       {!isOwnerPath && <Navbar setShowLogin={setShowLogin} />}
 
@@ -41,7 +45,7 @@ const App = () => {
 
         {/* Nested Routes for owner */}
         <Route path='/owner' element={<Layout />}>
-           {/* index means default route */}
+          {/* index means default route */}
           <Route index element={<Dashboard />} />
           <Route path='add-car' element={<AddCar />} />
           <Route path='manage-cars' element={<ManageCars />} />

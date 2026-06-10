@@ -3,12 +3,33 @@ import { assets, menuLinks } from '../assets/assets'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 //for dark mode
 import { useTheme } from '../Context/ThemeContext'
+//for App Context
+import { useAppContext } from '../Context/AppContext'
+import toast from 'react-hot-toast'
 
-const Navbar = ({ setShowLogin }) => {
+const Navbar = () => {
+
+  //from AppContext.jsx
+  const { setShowLogin, user, logout, isOwner, axios, setIsOwner } = useAppContext()
 
   const location = useLocation() //gives information about the current URL/page.
   const [open, setOpen] = useState(false) //state variable to hide menu links on smaller screen
   const navigate = useNavigate()
+
+  const changeRole = async () => {
+    try {
+      const { data } = await axios.post('/api/owner/change-role');
+      if (data.success) {
+        setIsOwner(true);
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   // dark mode
   const { theme, toggleTheme } = useTheme()
@@ -58,12 +79,12 @@ const Navbar = ({ setShowLogin }) => {
             )}
           </button>
 
-          <button onClick={() => navigate('/owner')} className='cursor-pointer'>
-            Dashboard
+          <button onClick={() => isOwner ? navigate('/owner') : changeRole()} className='cursor-pointer'>
+            {isOwner ? 'Dashboard' : 'List your car'}
           </button>
 
-          <button onClick={() => setShowLogin(true)} className='cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition-all text-white rounded-lg'>
-            Login
+          <button onClick={() => { user ? logout() : setShowLogin(true) }} className='cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition-all text-white rounded-lg'>
+            {user ? 'Logout' : 'Login'}
           </button>
 
         </div>

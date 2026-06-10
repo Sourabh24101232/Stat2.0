@@ -10,6 +10,7 @@ import {
     resendOtp,
     resetPassword,
     verifyOtp,
+    getCars,
 } from "../Controllers/userController.js"
 import { protect } from "../middleware/auth.js"
 
@@ -27,5 +28,6 @@ userRouter.post('/google-auth',googleAuth)
 userRouter.post('/logout',protect,logoutUser)
 userRouter.post('/logout-all-devices',protect,logoutAllDevices)
 userRouter.get('/data',protect,getUserData)
+userRouter.get('/cars',getCars)
 
 export default userRouter

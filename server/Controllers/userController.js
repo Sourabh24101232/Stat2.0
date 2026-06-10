@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import Session from "../models/SessionModel.js";
 import User from "../models/UserModel.js";
+import Car from '../models/CarModel.js'
 
 const OTP_EXPIRY_MINUTES = 10;
 
@@ -402,3 +403,13 @@ export const logoutAllDevices = async (req, res) => {
     }
 };
 
+//get All cars for frontend
+export const getCars = async (req, res) => {
+    try {
+        const cars=await Car.find({isAvailable:true})
+        res.json({ success: true, cars})
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message })
+    }
+}
