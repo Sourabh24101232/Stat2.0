@@ -6,6 +6,7 @@ import User from "../models/UserModel.js";
 import Car from '../models/CarModel.js'
 
 const OTP_EXPIRY_MINUTES = 10;
+const SESSION_EXPIRY_DAYS = 7;
 
 // Creates a JWT that the frontend stores and sends with protected requests.
 // The sessionId lets the backend revoke one device or all devices later.
@@ -19,6 +20,7 @@ const createSession = async (userId, req) => {
         user: userId,
         ip: req.ip,
         userAgent: req.headers["user-agent"] || "",
+        expiresAt: new Date(Date.now() + SESSION_EXPIRY_DAYS * 24 * 60 * 60 * 1000),
     });
 };
 
@@ -93,7 +95,8 @@ const userPayload = (user) => ({
 // 4. Send/log the OTP so the user can verify their email.
 export const registerUser = async (req, res) => {
     try {
-        const { name, password } = req.body;
+        const name = req.body.name?.trim();
+        const { password } = req.body;
         const email = normalizeEmail(req.body.email);
 
         // Basic validation before touching the database.
@@ -104,6 +107,13 @@ export const registerUser = async (req, res) => {
         // Do not allow two accounts with the same email.
         const userExists = await User.findOne({ email });
         if (userExists) {
+            if (!userExists.isVerified && userExists.authProvider === "local") {
+                return res.json({
+                    success: false,
+                    needsVerification: true,
+                    message: "Account already registered. Verify your email or request a new OTP.",
+                });
+            }
             return res.json({ success: false, message: "User already exists" });
         }
 
@@ -154,11 +164,9 @@ export const verifyOtp = async (req, res) => {
             return res.json({ success: false, message: "User not found" });
         }
 
-        // If already verified, simply return a fresh token.
+        // Never use this endpoint as an alternate login path for verified users.
         if (user.isVerified) {
-            const session = await createSession(user._id, req);
-            const token = generateToken(user._id.toString(), session._id.toString());
-            return res.json({ success: true, message: "Email already verified", token, user: userPayload(user) });
+            return res.json({ success: false, message: "Email is already verified. Please log in." });
         }
 
         // Reject missing, expired, or incorrect OTPs.
@@ -192,6 +200,10 @@ export const resendOtp = async (req, res) => {
             return res.json({ success: false, message: "User not found" });
         }
 
+        if (user.authProvider === "google") {
+            return res.json({ success: false, message: "This Google account does not require email verification" });
+        }
+
         if (user.isVerified) {
             return res.json({ success: false, message: "User is already verified" });
         }
@@ -219,6 +231,10 @@ export const loginUser = async (req, res) => {
     try {
         const email = normalizeEmail(req.body.email);
         const { password } = req.body;
+
+        if (!email || !password) {
+            return res.json({ success: false, message: "Email and password are required" });
+        }
 
         // Google-only users may not have a password, so local login is blocked.
         const user = await User.findOne({ email });
@@ -305,7 +321,13 @@ export const resetPassword = async (req, res) => {
         user.password = await bcrypt.hash(password, 10);
         user.resetOtp = "";
         user.resetOtpExpires = undefined;
+        if (user.authProvider === "google") {
+            user.authProvider = "both";
+        }
         await user.save();
+
+        // A password change invalidates every existing login session.
+        await Session.updateMany({ user: user._id, revoked: false }, { revoked: true });
 
         res.json({ success: true, message: "Password reset successfully" });
     } catch (error) {
@@ -331,7 +353,9 @@ export const googleAuth = async (req, res) => {
         const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
         const googleUser = await response.json();
 
-        if (!response.ok || !googleUser.email) {
+        const emailIsVerified = googleUser.email_verified === true || googleUser.email_verified === "true";
+
+        if (!response.ok || !googleUser.email || !googleUser.sub || !emailIsVerified) {
             return res.json({ success: false, message: "Invalid Google credential" });
         }
 
@@ -355,9 +379,16 @@ export const googleAuth = async (req, res) => {
             });
         } else {
             // Link Google details to an existing account with the same email.
+            if (user.googleId && user.googleId !== googleUser.sub) {
+                return res.json({ success: false, message: "This email is linked to another Google account" });
+            }
+
             user.googleId = user.googleId || googleUser.sub;
             user.image = user.image || googleUser.picture || "";
             user.isVerified = true;
+            if (user.authProvider === "local") {
+                user.authProvider = "both";
+            }
             await user.save();
         }
 

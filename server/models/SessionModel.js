@@ -5,6 +5,7 @@ const sessionSchema = new mongoose.Schema({
     revoked: { type: Boolean, default: false },
     ip: { type: String, default: "" },
     userAgent: { type: String, default: "" },
+    expiresAt: { type: Date, required: true, index: { expires: 0 } },
 }, { timestamps: true });
 
 const Session = mongoose.model("Session", sessionSchema);

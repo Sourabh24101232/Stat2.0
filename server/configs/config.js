@@ -1,5 +1,4 @@
 import dotenv from "dotenv"
-import { errors } from "passport-local-mongoose";
 dotenv.config();// calling dotenv
 
 if (!process.env.MONGO_URI) {

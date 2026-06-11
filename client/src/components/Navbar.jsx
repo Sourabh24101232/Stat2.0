@@ -4,30 +4,37 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 //for dark mode
 import { useTheme } from '../Context/ThemeContext'
 //for App Context
-import { useAppContext } from '../Context/AppContext'
+import { useAppContext } from '../Context/app-context'
 import toast from 'react-hot-toast'
 
 const Navbar = () => {
 
   //from AppContext.jsx
-  const { setShowLogin, user, logout, isOwner, axios, setIsOwner } = useAppContext()
+  const { setShowLogin, user, setUser, logout, isOwner, axios, setIsOwner } = useAppContext()
 
   const location = useLocation() //gives information about the current URL/page.
   const [open, setOpen] = useState(false) //state variable to hide menu links on smaller screen
   const navigate = useNavigate()
 
   const changeRole = async () => {
+    if (!user) {
+      setShowLogin(true)
+      return
+    }
+
     try {
       const { data } = await axios.post('/api/owner/change-role');
       if (data.success) {
         setIsOwner(true);
+        setUser((currentUser) => ({ ...currentUser, role: data.role }))
         toast.success(data.message);
+        navigate('/owner')
       } else {
         toast.error(data.message);
       }
 
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 

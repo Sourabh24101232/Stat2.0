@@ -1,81 +1,134 @@
-import { createContext, useContext } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { AppContext } from "./app-context";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
-
-export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
 
     const navigate = useNavigate()
     const currency = import.meta.env.VITE_CURRENCY
 
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState(() => localStorage.getItem("token"));
     const [user, setUser] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
+    const [authLoading, setAuthLoading] = useState(() => Boolean(localStorage.getItem("token")));
     const [showLogin, setShowLogin] = useState(false);
     const [pickupDate, setPickupDate] = useState('');
     const [returnDate, setReturnDate] = useState('');
     const [cars, setCars] = useState([]);
 
-    //function to check if user is logged in
-    const fetchUser = async () => {
+    const clearAuthentication = useCallback(() => {
+        localStorage.removeItem('token')
+        delete axios.defaults.headers.common.Authorization
+        setToken(null)
+        setUser(null)
+        setIsOwner(false)
+        setAuthLoading(false)
+    }, [])
+
+    const completeAuthentication = useCallback((data) => {
+        localStorage.setItem('token', data.token)
+        axios.defaults.headers.common.Authorization = `Bearer ${data.token}`
+        setToken(data.token)
+        setUser(data.user)
+        setIsOwner(data.user?.role === 'owner')
+        setAuthLoading(false)
+        setShowLogin(false)
+    }, [])
+
+    // Check that the stored token still represents an active server session.
+    const fetchUser = useCallback(async () => {
         try {
             const { data } = await axios.get('/api/user/data')
             if (data.success) {
                 setUser(data.user);
                 setIsOwner(data.user.role === 'owner');
             } else {
-                navigate('/');
+                clearAuthentication()
             }
         } catch (error) {
-            toast.error(error.message);
+            clearAuthentication()
+            if (error.response?.status !== 401) {
+                toast.error(error.response?.data?.message || error.message);
+            }
+        } finally {
+            setAuthLoading(false)
         }
-    };
+    }, [clearAuthentication]);
 
     //function to fetch all cars from the server
-    const fetchCars = async () => {
+    const fetchCars = useCallback(async () => {
         try {
             const { data } = await axios.get('/api/user/cars')
             data.success ? setCars(data.cars) : toast.error(data.message)
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.response?.data?.message || error.message);
         }
-    }
+    }, [])
 
-    //function to log out the user
-    const logout = () => {
-        localStorage.removeItem('token')
-        setToken(null)
-        setUser(null)
-        setIsOwner(false)
-        axios.defaults.headers.common["Authorization"] = ''
-        toast.success('You have been logged out!')
-    }
-
-    // useEffect to retrieve token from localStorage
-    useEffect(() => {
-        const Token = localStorage.getItem("token");
-        setToken(Token);
-        fetchCars()
-    }, []);
-
-    // useEffect to fetch user when token is available
-    useEffect(() => {
-        if (token) {
-            axios.defaults.headers.common["Authorization"] = `${token}`;
-            fetchUser();
+    // Revoke the current server session before clearing browser state.
+    const logout = async () => {
+        try {
+            if (token) {
+                await axios.post('/api/user/logout')
+            }
+        } catch (error) {
+            if (error.response?.status !== 401) {
+                toast.error(error.response?.data?.message || error.message)
+            }
+        } finally {
+            clearAuthentication()
+            navigate('/')
+            toast.success('You have been logged out!')
         }
-    }, [token]);
+    };
+
+    useEffect(() => {
+        if (!token) {
+            delete axios.defaults.headers.common.Authorization
+            return
+        }
+
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+        const restoreSession = async () => {
+            await fetchUser()
+        }
+
+        restoreSession()
+    }, [fetchUser, token]);
+
+    useEffect(() => {
+        const loadCars = async () => {
+            await fetchCars()
+        }
+
+        loadCars()
+    }, [fetchCars]);
+
+    // Any rejected protected request should remove the stale local session.
+    useEffect(() => {
+        const interceptor = axios.interceptors.response.use(
+            (response) => response,
+            (error) => {
+                if (error.response?.status === 401 && token) {
+                    clearAuthentication()
+                }
+                return Promise.reject(error)
+            }
+        )
+
+        return () => axios.interceptors.response.eject(interceptor)
+    }, [clearAuthentication, token])
 
     //Context Value Object , Everything inside becomes globally available.
     const value = {
         navigate, currency, axios, user, setUser, token, setToken,
-        isOwner, setIsOwner, fetchUser, showLogin, setShowLogin, logout,
+        isOwner, setIsOwner, authLoading, fetchUser, showLogin, setShowLogin,
+        completeAuthentication, clearAuthentication, logout,
         fetchCars, cars, setCars,
         pickupDate, setPickupDate, returnDate, setReturnDate,
     }
@@ -85,8 +138,4 @@ export const AppProvider = ({ children }) => {
             {children}
         </AppContext.Provider>
     )
-}
-
-export const useAppContext = () => {
-    return useContext(AppContext);
 }

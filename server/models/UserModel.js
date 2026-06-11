@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     resetOtp: { type: String, default: "" },
     resetOtpExpires: { type: Date },
     googleId: { type: String, default: "" },
-    authProvider: { type: String, enum: ["local", "google"], default: "local" },
+    authProvider: { type: String, enum: ["local", "google", "both"], default: "local" },
 }, { timestamps: true }
 );
 

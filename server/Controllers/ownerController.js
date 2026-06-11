@@ -9,12 +9,16 @@ import Booking from "../models/BookingModel.js";
 export const changeRoleToOwner = async (req, res) => {
     try {
         const id = req.user._id;
-        await User.findByIdAndUpdate(id, { role: "owner" });
+        const user = await User.findByIdAndUpdate(
+            id,
+            { role: "owner" },
+            { new: true }
+        );
 
         if (!user) {
             return res.json({ success: false, message: "User not found" });
         }
-        res.json({ success: true, message: "Now you can list cars" });
+        res.json({ success: true, message: "Now you can list cars", role: user.role });
 
     } catch (error) {
         console.log(error.message);
