@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import Loader from './Loader'
-import { useAppContext } from '../Context/app-context'
+import { useAppContext } from '../Context/AppContext'
 
 const ProtectedRoute = ({ children, ownerOnly = false }) => {
     const { user, isOwner, authLoading } = useAppContext()

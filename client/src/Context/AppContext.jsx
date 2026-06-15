@@ -1,10 +1,23 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
-import { AppContext } from "./app-context";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
+
+const AppContext = createContext(null)
+
+// Kept with the provider so AppContext has a single public module.
+// eslint-disable-next-line react-refresh/only-export-components
+export const useAppContext = () => {
+    const context = useContext(AppContext)
+
+    if (!context) {
+        throw new Error('useAppContext must be used inside AppProvider')
+    }
+
+    return context
+}
 
 export const AppProvider = ({ children }) => {
 

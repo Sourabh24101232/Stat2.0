@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 //for dark mode
 import { useTheme } from '../Context/ThemeContext'
 //for App Context
-import { useAppContext } from '../Context/app-context'
+import { useAppContext } from '../Context/AppContext'
 import toast from 'react-hot-toast'
 
 const Navbar = () => {

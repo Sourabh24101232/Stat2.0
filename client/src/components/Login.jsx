@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { assets } from '../assets/assets'
-import { useAppContext } from '../Context/app-context'
+import { useAppContext } from '../Context/AppContext'
 
 const Login = () => {
     // Authentication state and helpers shared through AppContext.
@@ -38,6 +38,20 @@ const Login = () => {
         heading = 'Reset password'
     } else if (isSignUp) {
         heading = 'Sign up'
+    }
+
+    let description
+
+    if (isVerifyEmail) {
+        description = 'Enter the verification code sent to your email'
+    } else if (isSetNewPassword) {
+        description = 'Enter the reset code and choose a new password'
+    } else if (isResetPassword) {
+        description = 'Enter your email and we will send reset instructions'
+    } else if (isSignUp) {
+        description = 'Create an account to continue'
+    } else {
+        description = 'Welcome back! Please login to continue'
     }
 
     // Choose the button label and show feedback while a request is running.
@@ -117,7 +131,7 @@ const Login = () => {
         }
     }, [googleClientId, handleGoogleCredential, isResetPassword, isSetNewPassword, isSignUp, isVerifyEmail])
 
-    
+
     const onSubmitHandler = async (event) => {
         event.preventDefault()
 
@@ -209,7 +223,7 @@ const Login = () => {
 
             {/* Clicking inside the card must not close the modal. */}
             <div onClick={(event) => event.stopPropagation()} className="flex w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800 dark:shadow-[0px_10px_25px_rgba(0,0,0,0.35)]">
-                
+
                 {/* Left image */}
                 <div className="hidden w-1/2 md:block">
                     <img className="h-full w-full object-cover" src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/leftSideImage.png" alt="leftSideImage" />
@@ -223,15 +237,7 @@ const Login = () => {
                             {heading}
                         </h2>
                         <p className="mt-3 text-center text-sm text-gray-500/90 dark:text-gray-400">
-                            {isVerifyEmail
-                                ? 'Enter the verification code sent to your email'
-                                : isSetNewPassword
-                                    ? 'Enter the reset code and choose a new password'
-                                    : isResetPassword
-                                ? 'Enter your email and we will send reset instructions'
-                                : isSignUp
-                                    ? 'Create an account to continue'
-                                    : 'Welcome back! Please login to continue'}
+                            {description}
                         </p>
 
                         {!isResetPassword && !isVerifyEmail && !isSetNewPassword && (

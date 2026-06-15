@@ -17,7 +17,7 @@ import Login from './components/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import { Toaster } from 'react-hot-toast'
-import { useAppContext } from './Context/app-context'
+import { useAppContext } from './Context/AppContext'
 const App = () => {
 
   //showLogin → stores whether the login popup is visible

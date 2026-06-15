@@ -1,11 +1,63 @@
-import React from 'react'
-import { dummyMyBookingsData } from '../../assets/assets'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import Title from '../../components/owner/Title'
+import Loader from '../../components/Loader'
+import { useAppContext } from '../../Context/AppContext'
 
 const ManageBookings = () => {
 
-  const currency = import.meta.env.VITE_CURRENCY
-  const bookings = dummyMyBookingsData
+  const { axios, currency } = useAppContext()
+  const [bookings, setBookings] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [activeBookingId, setActiveBookingId] = useState(null)
+
+  useEffect(() => {
+    const fetchOwnerBookings = async () => {
+      try {
+        const { data } = await axios.get('/api/bookings/owner')
+
+        if (data.success) {
+          setBookings(data.bookings)
+        } else {
+          toast.error(data.message)
+        }
+      } catch (error) {
+        toast.error(error.response?.data?.message || error.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchOwnerBookings()
+  }, [axios])
+
+  const changeBookingStatus = async (bookingId, status) => {
+    try {
+      setActiveBookingId(bookingId)
+      const { data } = await axios.post('/api/bookings/change-status', {
+        bookingId,
+        status,
+      })
+
+      if (!data.success) {
+        toast.error(data.message)
+        return
+      }
+
+      setBookings((currentBookings) => currentBookings.map((booking) => (
+        booking._id === bookingId ? { ...booking, status } : booking
+      )))
+      toast.success(data.message)
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message)
+    } finally {
+      setActiveBookingId(null)
+    }
+  }
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <div className='px-4 pt-10 md:px-10 w-full'>
@@ -29,13 +81,32 @@ const ManageBookings = () => {
 
           <tbody>
 
-            {bookings.map((booking, index) => (
-              <tr key={index} className='border-t border-borderColor text-gray-500 dark:border-gray-700 dark:text-gray-400'>
+            {bookings.length === 0 && (
+              <tr className='border-t border-borderColor dark:border-gray-700'>
+                <td colSpan={5} className='p-6 text-center text-gray-500 dark:text-gray-400'>
+                  No bookings found.
+                </td>
+              </tr>
+            )}
+
+            {bookings.map((booking) => (
+              <tr key={booking._id} className='border-t border-borderColor text-gray-500 dark:border-gray-700 dark:text-gray-400'>
 
                 <td className='p-3'>
                   <div className='flex items-center gap-3'>
-                    <img src={booking.car.image} alt="" className='h-12 w-12 aspect-square rounded-md object-cover' />
-                    <p className='font-medium max-md:hidden'> {booking.car.brand} {booking.car.model} </p>
+                    {booking.car?.image && (
+                      <img
+                        src={booking.car.image}
+                        alt={`${booking.car.brand} ${booking.car.model}`}
+                        className='h-12 w-12 aspect-square rounded-md object-cover'
+                      />
+                    )}
+                    <div className='max-md:hidden'>
+                      <p className='font-medium'>
+                        {booking.car ? `${booking.car.brand} ${booking.car.model}` : 'Car unavailable'}
+                      </p>
+                      <p className='text-xs'>{booking.user?.name || booking.user?.email || 'Customer'}</p>
+                    </div>
                   </div>
                 </td>
 
@@ -48,7 +119,12 @@ const ManageBookings = () => {
 
                 <td className='p-3'>
                   {booking.status === 'pending' ? (
-                    <select value={booking.status} className='mt-1 rounded-md border border-borderColor bg-transparent px-2 py-1.5 text-gray-500 outline-none dark:border-gray-700 dark:text-gray-200'>
+                    <select
+                      value={booking.status}
+                      disabled={activeBookingId === booking._id}
+                      onChange={(event) => changeBookingStatus(booking._id, event.target.value)}
+                      className='mt-1 rounded-md border border-borderColor bg-transparent px-2 py-1.5 text-gray-500 outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200'
+                    >
                       <option value="pending">Pending</option>
                       <option value="cancelled">Cancelled</option>
                       <option value="confirmed">Confirmed</option>
@@ -56,7 +132,7 @@ const ManageBookings = () => {
 
                   ) : (
 
-                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${booking.status === 'confirmed' ? 'bg-green-100 text-green-500 dark:bg-green-400/15' : ''}`} > {booking.status}</span>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${booking.status === 'confirmed' ? 'bg-green-100 text-green-500 dark:bg-green-400/15' : 'bg-red-100 text-red-500 dark:bg-red-400/15'}`} > {booking.status}</span>
 
                   )}
                 </td>

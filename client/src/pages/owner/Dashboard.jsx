@@ -1,12 +1,47 @@
-import React from 'react'
-import { assets } from '../../assets/assets';
-import { dummyDashboardData } from '../../assets/assets';
-import Title from '../../components/owner/Title';
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { assets } from '../../assets/assets'
+import Title from '../../components/owner/Title'
+import Loader from '../../components/Loader'
+import { useAppContext } from '../../Context/AppContext'
 
 const Dashboard = () => {
 
-  const currency = import.meta.env.VITE_CURRENCY
-  const data = dummyDashboardData;
+  const { axios, currency } = useAppContext()
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await axios.get('/api/owner/dashboard')
+
+        if (response.data.success) {
+          setData(response.data.dashboardData)
+        } else {
+          toast.error(response.data.message)
+        }
+      } catch (error) {
+        toast.error(error.response?.data?.message || error.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchDashboardData()
+  }, [axios])
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (!data) {
+    return (
+      <div className='flex flex-1 items-center justify-center px-4 pt-10 text-gray-500 dark:text-gray-400'>
+        Unable to load dashboard data.
+      </div>
+    )
+  }
 
   const dashboardCards = [
     { title: "Total Cars", value: data.totalCars, icon: assets.carIconColored, },
@@ -46,8 +81,12 @@ const Dashboard = () => {
           <h1 className='text-lg font-medium'>Recent Bookings</h1>
           <p className='text-gray-600 dark:text-gray-400'>Latest customer bookings</p>
 
-          {data.recentBookings.map((booking, index) => (
-            <div key={index} className='mt-4 flex items-center justify-between'>
+          {data.recentBookings.length === 0 && (
+            <p className='mt-4 text-sm text-gray-500 dark:text-gray-400'>No recent bookings.</p>
+          )}
+
+          {data.recentBookings.map((booking) => (
+            <div key={booking._id} className='mt-4 flex items-center justify-between'>
 
               <div className='flex items-center gap-2'>
                 <div className='hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-primary/10'>
@@ -55,7 +94,7 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <p>{booking.car.brand} {booking.car.model}</p>
+                  <p>{booking.car?.brand} {booking.car?.model}</p>
                   <p className='text-sm text-gray-500 dark:text-gray-400'>{booking.createdAt.split('T')[0]}</p>
                 </div>
               </div>
@@ -69,11 +108,11 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* monthly revenue */}
+        {/* total revenue */}
         <div className='mb-6 w-full rounded-md border border-borderColor bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:max-w-xs md:p-6'>
-          <h1 className='text-lg font-medium'>Monthly Revenue</h1>
-          <p className='text-gray-500 dark:text-gray-400'>Revenue for current month</p>
-          <p className='text-3xl mt-6 font-semibold text-blue-600'> {currency}{data.monthlyRevenue}</p>
+          <h1 className='text-lg font-medium'>Total Revenue</h1>
+          <p className='text-gray-500 dark:text-gray-400'>Revenue from confirmed bookings</p>
+          <p className='text-3xl mt-6 font-semibold text-blue-600'> {currency}{data.totalRevenue}</p>
         </div>
 
       </div>

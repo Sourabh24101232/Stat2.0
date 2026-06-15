@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import { useAppContext } from "../../Context/app-context";
+import { useAppContext } from "../../Context/AppContext";
 
 const NavbarOwner = () => {
 

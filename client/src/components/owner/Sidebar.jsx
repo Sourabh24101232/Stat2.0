@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { assets, ownerMenuLinks } from '../../assets/assets'
 import { useLocation } from 'react-router-dom';
 import { NavLink } from "react-router-dom";
-import { useAppContext } from '../../Context/app-context';
+import { useAppContext } from '../../Context/AppContext';
 
 const Sidebar = () => {
 
@@ -54,9 +54,8 @@ const Sidebar = () => {
 
             {/* Save Button , the button is rendered only when image is not null i.e., after the user selects an image */}
             {image && (
-                <button className="absolute top-0 right-0 flex p-2 gap-1 bg-primary/10 text-primary cursor-pointer" onClick={updateImage}>
-                    Save<img src={assets.check_icon} width={13} alt="" /></button>
-            )}
+                <button className="absolute top-0 right-0 flex p-2 gap-1 bg-primary/10 text-primary cursor-pointer" onClick={updateImage}>Save<img src={assets.check_icon} width={13} alt="" /></button>)
+            }
 
             {/* User Name , Hidden on small screens.*/}
             <p className="mt-2 text-base max-md:hidden">{user?.name}</p>
