@@ -6,7 +6,13 @@ import Home from './pages/Home'
 import CarDetails from './pages/CarDetails'
 import Cars from './pages/Cars'
 import MyBookings from './pages/MyBookings'
+import About from './pages/About'
+import HelpCenter from './pages/HelpCenter'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
+import Insurance from './pages/Insurance'
 import Footer from './components/Footer'
+import ScrollToTop from './components/ScrollToTop'
 
 import Layout from './pages/owner/Layout'
 import Dashboard from './pages/owner/Dashboard'
@@ -29,6 +35,7 @@ const App = () => {
     <div className="min-h-screen bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-200">
 
       <Toaster />
+      <ScrollToTop />
 
       {/* Conditional Navbar */}
       {!isOwnerPath && <Navbar/>}
@@ -41,6 +48,11 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/cars' element={<Cars />} />
         <Route path='/my-bookings' element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
+        <Route path='/about' element={<About />} />
+        <Route path='/help' element={<HelpCenter />} />
+        <Route path='/terms' element={<Terms />} />
+        <Route path='/privacy' element={<Privacy />} />
+        <Route path='/insurance' element={<Insurance />} />
         {/* Dynamic route */}
         <Route path='/car-details/:id' element={<CarDetails />} />
 

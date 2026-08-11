@@ -1,6 +1,15 @@
 import Booking from "../models/BookingModel.js";
 import Car from "../models/CarModel.js";
 
+const hasValidBookingDates = (pickupDate, returnDate) => {
+    const pickup = new Date(pickupDate);
+    const returned = new Date(returnDate);
+
+    return !Number.isNaN(pickup.getTime())
+        && !Number.isNaN(returned.getTime())
+        && returned > pickup;
+};
+
 // Function to Check Availability of Car for a given Date using form on Home page
 const checkAvailability = async (car, pickupDate, returnDate) => {
     const bookings = await Booking.find({
@@ -18,6 +27,13 @@ export default checkAvailability;
 export const checkAvailabilityOfCar = async (req, res) => {
     try {
         const { location, pickupDate, returnDate } = req.body;
+
+        if (!location || !hasValidBookingDates(pickupDate, returnDate)) {
+            return res.status(400).json({
+                success: false,
+                message: "Provide a location and a return date after the pickup date.",
+            });
+        }
 
         // fetch all available cars for the given location
         const cars = await Car.find({ location, isAvailable: true });
@@ -51,6 +67,13 @@ export const createBooking = async (req, res) => {
     try {
         const { _id } = req.user;
         const { car, pickupDate, returnDate } = req.body;
+
+        if (!car || !hasValidBookingDates(pickupDate, returnDate)) {
+            return res.status(400).json({
+                success: false,
+                message: "Provide a car and a return date after the pickup date.",
+            });
+        }
 
         //check if available
         const isAvailable = await checkAvailability(car, pickupDate, returnDate);

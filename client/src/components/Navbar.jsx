@@ -59,18 +59,8 @@ const Navbar = () => {
           </Link>
         ))}
 
-        {/* search bar */}
-        <div className='hidden lg:flex items-center text-sm gap-2 border border-borderColor dark:border-gray-700 px-3 rounded-full max-w-56'>
-          <input
-            type="text"
-            className='py-1.5 w-full bg-transparent outline-none placeholder-gray-500 dark:placeholder-gray-400'
-            placeholder='Search products'
-          />
-          <img src={assets.search_icon} alt="search" />
-        </div>
-
-        {/* Dashboard , Login and dark mode Button */}
-        <div className='flex max-sm:flex-col items-start sm:items-center gap-6'>
+        {/* Dashboard, login, and theme controls */}
+        <div className='flex max-sm:flex-col items-start sm:items-center gap-4 sm:gap-6'>
 
           {/* Dark mode */}
           <button onClick={toggleTheme} className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-borderColor dark:border-gray-700' aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}>
