@@ -4,6 +4,8 @@ import imagekit from "../configs/imagekit.js";
 import Car from "../models/CarModel.js";
 import Booking from "../models/BookingModel.js";
 
+const allowedCarFeatures = ["360 Camera", "Bluetooth", "GPS", "Heated Seats", "Rear View Mirror"];
+
 
 //controller function to change role of user
 export const changeRoleToOwner = async (req, res) => {
@@ -34,6 +36,10 @@ export const addCar = async (req, res) => {
         //get car data and umage from request
         let car = JSON.parse(req.body.carData);
         const imageFile = req.file;
+
+        car.features = Array.isArray(car.features)
+            ? car.features.filter((feature) => allowedCarFeatures.includes(feature))
+            : [];
 
         //upload image to imageKit using middleware(upload)
         const fileBuffer = fs.readFileSync(imageFile.path);

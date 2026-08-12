@@ -118,16 +118,26 @@ const ManageBookings = () => {
                 </td>
 
                 <td className='p-3'>
-                  {booking.status === 'pending' ? (
+                  {booking.status === 'pending' || booking.status === 'confirmed' ? (
                     <select
                       value={booking.status}
                       disabled={activeBookingId === booking._id}
                       onChange={(event) => changeBookingStatus(booking._id, event.target.value)}
                       className='mt-1 rounded-md border border-borderColor bg-transparent px-2 py-1.5 text-gray-500 outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200'
                     >
-                      <option value="pending">Pending</option>
-                      <option value="cancelled">Cancelled</option>
-                      <option value="confirmed">Confirmed</option>
+                      {booking.status === 'pending' ? (
+                        <>
+                          <option value="pending">Pending</option>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="cancelled">Cancelled</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
+                        </>
+                      )}
                     </select>
 
                   ) : (

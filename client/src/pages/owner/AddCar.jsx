@@ -15,7 +15,10 @@ const initialCarData = {
   seating_capacity: '',
   location: '',
   description: '',
+  features: [],
 }
+
+const availableFeatures = ['360 Camera', 'Bluetooth', 'GPS', 'Heated Seats', 'Rear View Mirror']
 
 const AddCar = () => {
   const { axios, currency, fetchCars } = useAppContext()
@@ -61,6 +64,15 @@ const AddCar = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const toggleFeature = (feature) => {
+    setCar((currentCar) => ({
+      ...currentCar,
+      features: currentCar.features.includes(feature)
+        ? currentCar.features.filter((item) => item !== feature)
+        : [...currentCar.features, feature],
+    }))
   }
 
   useEffect(() => {
@@ -187,6 +199,18 @@ const AddCar = () => {
             onChange={e => setCar({ ...car, description: e.target.value })}
           ></textarea>
         </div>
+
+        <fieldset className='flex flex-col w-full'>
+          <legend>Features available in this car</legend>
+          <div className='mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2'>
+            {availableFeatures.map((feature) => (
+              <label key={feature} className='flex cursor-pointer items-center gap-2'>
+                <input type="checkbox" checked={car.features.includes(feature)} onChange={() => toggleFeature(feature)} />
+                {feature}
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
         <button disabled={isLoading} className='flex items-center gap-2 px-4 py-2.5 mt-4 bg-primary text-white rounded-md font-medium w-max cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'>
           <img src={assets.tick_icon} alt="" />

@@ -17,6 +17,10 @@ const carSchema = new mongoose.Schema(
         pricePerDay: { type: Number, required: true },
         location: { type: String, required: true },
         description: { type: String, required: true },
+        features: { type: [String], default: [] },
+
+        averageRating: { type: Number, default: 0 },
+        reviewCount: { type: Number, default: 0 },
 
         isAvailable: { type: Boolean, default: true }
     }, { timestamps: true });

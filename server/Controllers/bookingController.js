@@ -1,5 +1,6 @@
 import Booking from "../models/BookingModel.js";
 import Car from "../models/CarModel.js";
+import Review from "../models/ReviewModel.js";
 
 const hasValidBookingDates = (pickupDate, returnDate) => {
     const pickup = new Date(pickupDate);
@@ -113,10 +114,19 @@ export const getUserBookings = async (req, res) => {
 
         const bookings = await Booking.find({ user: _id })
             .populate("car")
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .lean();
 
-        // console.log(bookings)
-        res.json({ success: true, bookings });
+        const reviews = await Review.find({
+            booking: { $in: bookings.map((booking) => booking._id) },
+        }).select("booking");
+        const reviewedBookingIds = new Set(reviews.map((review) => review.booking.toString()));
+        const bookingsWithReviewStatus = bookings.map((booking) => ({
+            ...booking,
+            hasReview: reviewedBookingIds.has(booking._id.toString()),
+        }));
+
+        res.json({ success: true, bookings: bookingsWithReviewStatus });
     } catch (error) {
         console.log(error.message);
         res.json({ success: false, message: error.message });
@@ -152,8 +162,21 @@ export const changeBookingStatus = async (req, res) => {
 
         const booking = await Booking.findById(bookingId);
 
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "Booking not found" });
+        }
+
         if (booking.owner.toString() !== _id.toString()) {
             return res.json({ success: false, message: "Unauthorized" });
+        }
+
+        const allowedTransitions = {
+            pending: ["confirmed", "cancelled"],
+            confirmed: ["completed", "cancelled"],
+        };
+
+        if (!allowedTransitions[booking.status]?.includes(status)) {
+            return res.status(400).json({ success: false, message: "Invalid booking status change" });
         }
 
         booking.status = status;
