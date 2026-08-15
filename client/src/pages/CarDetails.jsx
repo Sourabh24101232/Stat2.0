@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { assets } from "../assets/assets";
 import Loader from "../components/Loader";
@@ -7,6 +7,7 @@ import { useAppContext } from "../Context/AppContext";
 
 const CarDetails = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
   const {
     cars,
@@ -27,6 +28,14 @@ const CarDetails = () => {
   const [totalReviews, setTotalReviews] = useState(0);
   const today = new Date().toISOString().split("T")[0];
   const car = cars.find((item) => item._id === id);
+
+  useEffect(() => {
+    const pickupDateFromUrl = searchParams.get("pickupDate");
+    const returnDateFromUrl = searchParams.get("returnDate");
+
+    if (pickupDateFromUrl) setPickupDate(pickupDateFromUrl);
+    if (returnDateFromUrl) setReturnDate(returnDateFromUrl);
+  }, [searchParams, setPickupDate, setReturnDate]);
 
   const handleBooking = async (event) => {
     event.preventDefault();

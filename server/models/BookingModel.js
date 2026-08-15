@@ -11,12 +11,18 @@ const bookingSchema = new mongoose.Schema(
     returnDate: { type: Date, required: true },
     status: {
       type: String,
-      enum: ["pending", "confirmed","completed", "cancelled"],
+      enum: ["pending", "confirmed", "completed", "cancelled"],
       default: "pending",
     },
+    pendingExpiresAt: { type: Date },
     price: { type: Number, required: true },
+    pickupLocation: {
+      latitude: { type: Number },
+      longitude: { type: Number },
+      sharedAt: { type: Date },
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Booking = mongoose.model("Booking", bookingSchema);

@@ -164,12 +164,12 @@ export const getDashboardData = async (req, res) => {
         });
         const completedBookings = await Booking.find({
             owner: _id,
-            status: "confirmed",
+            status: "completed",
         });
 
-        // Calculate totalRevenue from bookings where status is confirmed
+        // Keep revenue after a confirmed rental progresses to completed.
         const totalRevenue = bookings
-            .filter((booking) => booking.status === "confirmed")
+            .filter((booking) => ["confirmed", "completed"].includes(booking.status))
             .reduce((acc, booking) => acc + booking.price, 0);
 
         const dashboardData = {

@@ -47,7 +47,7 @@ const Dashboard = () => {
     { title: "Total Cars", value: data.totalCars, icon: assets.carIconColored, },
     { title: "Total Bookings", value: data.totalBookings, icon: assets.listIconColored, },
     { title: "Pending", value: data.pendingBookings, icon: assets.cautionIconColored, },
-    { title: "Confirmed", value: data.completedBookings, icon: assets.listIconColored, },
+    { title: "Completed", value: data.completedBookings, icon: assets.listIconColored, },
   ];
 
   return (
@@ -111,7 +111,7 @@ const Dashboard = () => {
         {/* total revenue */}
         <div className='mb-6 w-full rounded-md border border-borderColor bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:max-w-xs md:p-6'>
           <h1 className='text-lg font-medium'>Total Revenue</h1>
-          <p className='text-gray-500 dark:text-gray-400'>Revenue from confirmed bookings</p>
+          <p className='text-gray-500 dark:text-gray-400'>Revenue from confirmed and completed bookings</p>
           <p className='text-3xl mt-6 font-semibold text-blue-600'> {currency}{data.totalRevenue}</p>
         </div>
 

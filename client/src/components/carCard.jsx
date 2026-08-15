@@ -1,13 +1,21 @@
 import React from 'react'
 import { assets } from '../assets/assets'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const CarCard = ({ car }) => {
     const currency = import.meta.env.VITE_CURRENCY
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const openCarDetails = () => {
+        // Keep the active availability-search dates when opening a car.
+        const search = location.pathname === '/cars' ? location.search : ''
+        navigate(`/car-details/${car._id}${search}`)
+        scrollTo(0, 0)
+    }
 
     return (
-        <div onClick={() => { navigate(`/car-details/${car._id}`); scrollTo(0, 0) }} className="group cursor-pointer overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 dark:border dark:border-gray-700 dark:bg-gray-800 dark:shadow-[0px_10px_25px_rgba(0,0,0,0.35)]">
+        <div onClick={openCarDetails} className="group cursor-pointer overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 dark:border dark:border-gray-700 dark:bg-gray-800 dark:shadow-[0px_10px_25px_rgba(0,0,0,0.35)]">
 
             <div className="relative h-48 overflow-hidden">
                 <img src={car.image} alt="Car Image" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
