@@ -1,11 +1,13 @@
 import React from 'react'
 import { assets } from '../assets/assets'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const CarCard = ({ car }) => {
     const currency = import.meta.env.VITE_CURRENCY
     const navigate = useNavigate()
     const location = useLocation()
+    const { t } = useTranslation('common')
 
     const openCarDetails = () => {
         // Keep the active availability-search dates when opening a car.
@@ -20,11 +22,11 @@ const CarCard = ({ car }) => {
             <div className="relative h-48 overflow-hidden">
                 <img src={car.image} alt="Car Image" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
 
-                {car.isAvailable && (<p className="absolute left-4 top-4 rounded-full bg-primary/90 px-2.5 py-1 text-xs text-white">Available Now</p>)}
+                {car.isAvailable && (<p className="absolute left-4 top-4 rounded-full bg-primary/90 px-2.5 py-1 text-xs text-white">{t('cars.availableNow')}</p>)}
 
                 <div className="absolute bottom-4 right-4 rounded-lg bg-black/80 px-3 py-2 text-white backdrop-blur-sm">
                     <span className="font-semibold">{currency}{car.pricePerDay}</span>
-                    <span className="text-sm text-white/80"> / day</span>
+                    <span className="text-sm text-white/80"> {t('cars.perDay')}</span>
                 </div>
             </div>
 
@@ -36,7 +38,7 @@ const CarCard = ({ car }) => {
                         <div className="mt-2 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <img src={assets.star_icon} alt="rating" className="h-4 w-4" />
                             <span>{(car.averageRating || 0).toFixed(1)}</span>
-                            <span>({car.reviewCount || 0} reviews)</span>
+                            <span>({t('cars.reviews', { count: car.reviewCount || 0 })})</span>
                         </div>
                     </div>
                 </div>
@@ -44,7 +46,7 @@ const CarCard = ({ car }) => {
                 <div className="mt-4 grid grid-cols-2 gap-y-2 text-gray-600 dark:text-gray-300">
                     <div className="flex items-center text-sm">
                         <img src={assets.users_icon} alt="" className="mr-2 h-4" />
-                        <span>{car.seating_capacity} Seats</span>
+                        <span>{t('booking.seats', { count: car.seating_capacity })}</span>
                     </div>
 
                     <div className="flex items-center text-sm">

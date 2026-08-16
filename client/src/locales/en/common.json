@@ -1,0 +1,38 @@
+{
+  "navbar": {
+    "home": "Home",
+    "cars": "Cars",
+    "myBookings": "My Bookings",
+    "aboutUs": "About Us",
+    "dashboard": "Dashboard",
+    "listYourCar": "List your car",
+    "login": "Login",
+    "logout": "Logout",
+    "switchLanguage": "Switch language",
+    "switchTheme": "Switch to {{mode}} mode"
+  },
+  "hero": {
+    "title": "Luxury cars on rent", "pickupLocation": "Pickup location", "selectLocation": "Please select your location", "pickupDate": "Pickup date", "returnDate": "Return date", "search": "Search"
+  },
+  "footer": {
+    "description": "Premium car rental service with a wide selection of luxury and everyday vehicles for all your driving needs.", "quickLinks": "Quick links", "browseCars": "Browse cars", "resources": "Resources", "helpCenter": "Help center", "terms": "Terms of service", "privacy": "Privacy policy", "insurance": "Insurance", "contact": "Contact", "rights": "All rights reserved.", "sitemap": "Sitemap"
+  },
+  "home": {
+    "featuredTitle": "Featured vehicles", "featuredSubtitle": "Explore our selection of premium vehicles available for your next adventure.", "exploreCars": "Explore all cars", "ownerTitle": "Do you own a luxury car?", "ownerText": "Monetize your vehicle effortlessly by listing it on Stat.", "ownerDetail": "We take care of insurance, driver verification, and secure payments—so you can earn passive income, stress-free."
+  },
+  "cars": {
+    "availableTitle": "Available cars", "availableSubtitle": "Browse our selection of premium vehicles available for your next adventure", "searchPlaceholder": "Search by make, model, type, transmission, or fuel", "showFilters": "Show car filters", "filterCars": "Filter cars", "clear": "Clear", "carType": "Car type", "transmission": "Transmission", "seats": "Seats", "maxPerDay": "Max/day", "sortBy": "Sort by", "all": "All", "any": "Any", "newest": "Newest", "priceLowHigh": "Price: low to high", "priceHighLow": "Price: high to low", "showing": "Showing {{count}} cars", "noneAvailable": "No cars available", "availableNow": "Available now", "perDay": "/ day", "reviews": "{{count}} reviews"
+  },
+  "booking": {
+    "back": "Back to all cars", "description": "Description", "features": "Features", "noFeatures": "No additional features listed for this car.", "perDay": "per day", "pickupDate": "Pickup date", "returnDate": "Return date", "bookNow": "Book now", "booking": "Booking...", "noCard": "No credit card required to reserve", "reviews": "Customer reviews", "noReviews": "No reviews yet.", "returnAfterPickup": "Return date must be after the pickup date.", "seats": "{{count}} seats"
+  },
+  "auth": {
+    "login": "Login", "verifyEmail": "Verify email", "newPassword": "New password", "resetPassword": "Reset password", "signUp": "Sign up", "verifyDescription": "Enter the verification code sent to your email", "newPasswordDescription": "Enter the reset code and choose a new password", "resetDescription": "Enter your email and we will send reset instructions", "signUpDescription": "Create an account to continue", "loginDescription": "Welcome back! Please login to continue", "pleaseWait": "Please wait...", "sendResetCode": "Send reset code", "createAccount": "Create account", "orWithEmail": "or {{action}} with email", "fullName": "Full name", "email": "Email address", "otp": "6-digit OTP", "password": "Password", "newPasswordPlaceholder": "New password (minimum 8 characters)", "forgotPassword": "Forgot password?", "resendCode": "Resend verification code", "returnToLogin": "Return to login?", "alreadyAccount": "Already have an account?", "noAccount": "Don't have an account?", "hidePassword": "Hide password", "showPassword": "Show password", "googleSuccess": "Logged in with Google successfully", "googleFailed": "Google authentication failed", "connectionFailed": "Unable to connect to the server"
+  },
+  "owner": {
+    "loginFirst": "Please login first to list your car"
+  },
+  "pages": {
+    "aboutTitle": "About us", "aboutFirst": "Stat makes it simple to find a dependable car for every journey. Browse vehicles, choose your dates, and book with confidence.", "aboutSecond": "We also help car owners earn from their vehicles by providing an easy way to list and manage their cars.", "helpTitle": "Help center", "helpText": "Need help with a booking or listing a car? Contact our support team at info@gmail.com and we will help you as soon as possible.", "termsTitle": "Terms of service", "termsText": "By using Stat, you agree to provide accurate booking and vehicle information. Bookings are subject to vehicle availability and the terms shown at checkout.", "privacyTitle": "Privacy policy", "privacyText": "We use your account and booking details only to operate the rental service, manage reservations, and provide support. We do not sell your personal information.", "insuranceTitle": "Insurance", "insuranceText": "Insurance coverage and eligibility can vary by vehicle and booking. Review the details provided for your selected car before confirming your reservation."
+  }
+}

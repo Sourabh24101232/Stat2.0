@@ -3,14 +3,16 @@ import { assets } from '../assets/assets'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { useAppContext } from '../Context/AppContext'
+import { useTranslation } from 'react-i18next'
 
 const Footer = () => {
     const { user, setUser, isOwner, setIsOwner, axios, setShowLogin } = useAppContext()
     const navigate = useNavigate()
+    const { t } = useTranslation('common')
 
     const handleListCar = async () => {
         if (!user) {
-            toast.error('Please login first to list your car')
+            toast.error(t('owner.loginFirst'))
             setShowLogin(true)
             return
         }
@@ -46,8 +48,7 @@ const Footer = () => {
                     <img src={assets.StatLogo} alt="logo" className="h-8 md:h-9" />
 
                     <p className="max-w-80 mt-3">
-                        Premium car rental service with a wide selection of luxury
-                        and everyday vehicles for all your driving needs.
+                        {t('footer.description')}
                     </p>
 
                     <div className='flex items-center gap-3 mt-6'>
@@ -62,27 +63,27 @@ const Footer = () => {
                 <div className='flex flex-wrap justify-between w-1/2 gap-8'>
 
                     <div>
-                        <h2 className='text-base font-medium uppercase text-gray-800 dark:text-gray-200'>Quick Links</h2>
+                        <h2 className='text-base font-medium uppercase text-gray-800 dark:text-gray-200'>{t('footer.quickLinks')}</h2>
                         <ul className='mt-3 flex flex-col gap-1.5'>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/cars">Browse cars</Link></li>
-                            <li><button type="button" onClick={handleListCar} className="cursor-pointer">List Your Car</button></li>
-                            <li><Link to="/about">About Us</Link></li>
+                            <li><Link to="/">{t('navbar.home')}</Link></li>
+                            <li><Link to="/cars">{t('footer.browseCars')}</Link></li>
+                            <li><button type="button" onClick={handleListCar} className="cursor-pointer">{t('navbar.listYourCar')}</button></li>
+                            <li><Link to="/about">{t('navbar.aboutUs')}</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h2 className='text-base font-medium uppercase text-gray-800 dark:text-gray-200'>Resources</h2>
+                        <h2 className='text-base font-medium uppercase text-gray-800 dark:text-gray-200'>{t('footer.resources')}</h2>
                         <ul className='mt-3 flex flex-col gap-1.5'>
-                            <li><Link to="/help">Help Center</Link></li>
-                            <li><Link to="/terms">Terms of service</Link></li>
-                            <li><Link to="/privacy">Privacy Policy</Link></li>
-                            <li><Link to="/insurance">Insurance</Link></li>
+                            <li><Link to="/help">{t('footer.helpCenter')}</Link></li>
+                            <li><Link to="/terms">{t('footer.terms')}</Link></li>
+                            <li><Link to="/privacy">{t('footer.privacy')}</Link></li>
+                            <li><Link to="/insurance">{t('footer.insurance')}</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h2 className='text-base font-medium uppercase text-gray-800 dark:text-gray-200'>Contact</h2>
+                        <h2 className='text-base font-medium uppercase text-gray-800 dark:text-gray-200'>{t('footer.contact')}</h2>
                         <ul className='mt-3 flex flex-col gap-1.5'>
                             <li>1234 Luxury Drive</li>
                             <li>San Francisco, CA94034</li>
@@ -98,11 +99,11 @@ const Footer = () => {
             <div className='flex flex-col md:flex-row gap-2 items-center justify-between py-5'>
                 <p>© {new Date().getFullYear()} <a href="https://prebuiltui.com">PrebuiltUI</a>. All rights reserved.</p>
                 <ul className='flex items-center gap-4'>
-                    <li><Link to="/privacy">Privacy</Link></li>
+                    <li><Link to="/privacy">{t('footer.privacy')}</Link></li>
                     <li>|</li>
-                    <li><Link to="/terms">Terms</Link></li>
+                    <li><Link to="/terms">{t('footer.terms')}</Link></li>
                     <li>|</li>
-                    <li><a href="#">Sitemap</a></li>
+                    <li><a href="#">{t('footer.sitemap')}</a></li>
                 </ul>
             </div>
 

@@ -2,15 +2,17 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../Context/AppContext'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 const Banner = () => {
     const { user, setUser, isOwner, setIsOwner, axios, navigate, setShowLogin } = useAppContext()
+    const { t } = useTranslation('common')
 
     const handleListCar = async () => {
 
         //if user is not logged in
         if (!user) {
-            toast.error('Please login first to list your car')
+            toast.error(t('owner.loginFirst'))
             setShowLogin(true)
             return
         }
@@ -46,11 +48,11 @@ const Banner = () => {
             <div className="text-white text-center md:text-left md:w-1/2">
 
                 <h2 className="text-3xl font-medium">
-                    Do You Own a Luxury Car?
+                    {t('home.ownerTitle')}
                 </h2>
 
                 <p className="mt-2">
-                    Monetize your vehicle effortlessly by listing it on CarRental.
+                    {t('home.ownerText')}
                 </p>
 
                 <p className="max-w-[500px]">
@@ -59,7 +61,7 @@ const Banner = () => {
                 </p>
 
                 <button onClick={handleListCar} className="px-6 py-2 bg-white hover:bg-slate-100 transition-all text-primary rounded-lg text-sm mt-4 cursor-pointer">
-                    List your car
+                    {t('navbar.listYourCar')}
                 </button>
             </div>
 

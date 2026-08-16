@@ -90,11 +90,18 @@ export const assets = {
     car_image4
 }
 
+// export const menuLinks = [
+//     { name: "Home", path: "/" },
+//     { name: "Cars", path: "/cars" },
+//     { name: "My Bookings", path: "/my-bookings" },
+//     { name: "About Us", path: "/about" },
+// ]
+
 export const menuLinks = [
-    { name: "Home", path: "/" },
-    { name: "Cars", path: "/cars" },
-    { name: "My Bookings", path: "/my-bookings" },
-    { name: "About Us", path: "/about" },
+    { labelKey: "navbar.home", path: "/" },
+    { labelKey: "navbar.cars", path: "/cars" },
+    { labelKey: "navbar.myBookings", path: "/my-bookings" },
+    { labelKey: "navbar.aboutUs", path: "/about" },
 ]
 
 export const ownerMenuLinks = [

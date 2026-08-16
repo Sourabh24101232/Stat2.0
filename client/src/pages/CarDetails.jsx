@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { assets } from "../assets/assets";
 import Loader from "../components/Loader";
 import { useAppContext } from "../Context/AppContext";
+import { useTranslation } from "react-i18next";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -28,6 +29,7 @@ const CarDetails = () => {
   const [totalReviews, setTotalReviews] = useState(0);
   const today = new Date().toISOString().split("T")[0];
   const car = cars.find((item) => item._id === id);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const pickupDateFromUrl = searchParams.get("pickupDate");
@@ -46,7 +48,7 @@ const CarDetails = () => {
     }
 
     if (returnDate <= pickupDate) {
-      toast.error("Return date must be after the pickup date.");
+      toast.error(t("booking.returnAfterPickup"));
       return;
     }
 
@@ -98,7 +100,7 @@ const CarDetails = () => {
         className="mb-6 flex cursor-pointer items-center gap-2 text-gray-500 dark:text-gray-400"
       >
         <img src={assets.arrow_icon} alt="" className="rotate-180 opacity-65" />
-        Back to all cars
+        {t("booking.back")}
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
@@ -117,7 +119,7 @@ const CarDetails = () => {
               {'\u2606'.repeat(5 - Math.round(averageRating))}
             </span>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {averageRating.toFixed(1)} ({totalReviews} reviews)
+              {averageRating.toFixed(1)} ({t("cars.reviews", { count: totalReviews })})
             </span>
           </div>
           <p className="mb-6 text-gray-500 dark:text-gray-400">
@@ -128,7 +130,7 @@ const CarDetails = () => {
             {[
               {
                 icon: assets.users_icon,
-                text: `${car.seating_capacity} Seats`,
+                text: t("booking.seats", { count: car.seating_capacity }),
               },
               { icon: assets.fuel_icon, text: car.fuel_type },
               { icon: assets.car_icon, text: car.transmission },
@@ -145,14 +147,14 @@ const CarDetails = () => {
           </div>
 
           <div className="mt-8">
-            <h2 className="text-xl font-medium mb-3">Description</h2>
+            <h2 className="text-xl font-medium mb-3">{t("booking.description")}</h2>
             <p className="text-gray-500 dark:text-gray-400">
               {car.description}
             </p>
           </div>
 
           <div className="mt-8">
-            <h2 className="text-xl font-medium mb-3">Features</h2>
+            <h2 className="text-xl font-medium mb-3">{t("booking.features")}</h2>
             {car.features?.length ? (
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {car.features.map((item) => (
@@ -166,7 +168,7 @@ const CarDetails = () => {
               ))}
               </ul>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400">No additional features listed for this car.</p>
+              <p className="text-gray-500 dark:text-gray-400">{t("booking.noFeatures")}</p>
             )}
           </div>
         </div>
@@ -180,14 +182,14 @@ const CarDetails = () => {
               {currency}
               {car.pricePerDay}
               <span className="text-base text-gray-400 font-normal">
-                per day
+                {t("booking.perDay")}
               </span>
             </p>
 
             <hr className="my-6 border-borderColor dark:border-gray-700" />
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="pickup-date">Pickup Date</label>
+              <label htmlFor="pickup-date">{t("booking.pickupDate")}</label>
               <input
                 value={pickupDate}
                 onChange={(event) => setPickupDate(event.target.value)}
@@ -200,7 +202,7 @@ const CarDetails = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="return-date">Return Date</label>
+              <label htmlFor="return-date">{t("booking.returnDate")}</label>
               <input
                 value={returnDate}
                 onChange={(event) => setReturnDate(event.target.value)}
@@ -216,20 +218,20 @@ const CarDetails = () => {
               disabled={isSubmitting}
               className="w-full bg-blue-600 hover:bg-blue-700 transition-all py-3 font-medium text-white rounded-xl cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isSubmitting ? "Booking..." : "Book Now"}
+              {isSubmitting ? t("booking.booking") : t("booking.bookNow")}
             </button>
             <p className="text-center text-sm">
-              No Credit Card required to reserve
+              {t("booking.noCard")}
             </p>
           </form>
         </div>
 
         <div className="mt-10 lg:col-span-2">
-          <h2 className="text-xl font-medium">Customer Reviews</h2>
+          <h2 className="text-xl font-medium">{t("booking.reviews")}</h2>
 
           {reviews.length === 0 ? (
             <p className="mt-3 text-gray-500 dark:text-gray-400">
-              No reviews yet.
+              {t("booking.noReviews")}
             </p>
           ) : (
             <div className="mt-4 space-y-4">
