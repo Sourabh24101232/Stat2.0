@@ -30,6 +30,12 @@ const CarDetails = () => {
   const today = new Date().toISOString().split("T")[0];
   const car = cars.find((item) => item._id === id);
   const { t } = useTranslation("common");
+  const whatsappNumber = car?.owner?.whatsappNumber?.replace(/\D/g, "");
+  const whatsappUrl = whatsappNumber
+    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+        `Hello, I am interested in your ${car.brand} ${car.model} listed on STAT.`,
+      )}`
+    : "";
 
   useEffect(() => {
     const pickupDateFromUrl = searchParams.get("pickupDate");
@@ -220,6 +226,19 @@ const CarDetails = () => {
             >
               {isSubmitting ? t("booking.booking") : t("booking.bookNow")}
             </button>
+            {whatsappUrl && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 font-medium text-white transition hover:bg-[#1ebe5d]"
+              >
+                <svg viewBox="0 0 32 32" className="h-5 w-5 fill-current" aria-hidden="true">
+                  <path d="M16.02 3C8.84 3 3 8.84 3 16.02c0 2.3.6 4.55 1.75 6.53L3 29l6.64-1.74a12.94 12.94 0 0 0 6.38 1.68h.01C23.2 28.94 29 23.1 29 15.96 29 8.84 23.2 3 16.02 3Zm0 23.58c-2.03 0-4.02-.55-5.76-1.58l-.41-.24-3.94 1.03 1.05-3.84-.27-.43a10.6 10.6 0 1 1 9.33 5.06Zm5.81-7.94c-.32-.16-1.88-.93-2.17-1.03-.29-.11-.5-.16-.71.16-.21.32-.81 1.03-.99 1.24-.18.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.88-1.76-2.2-.18-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.54-.71-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.15 3.08 1.31 3.3c.16.21 2.26 3.45 5.47 4.84.76.33 1.35.53 1.81.68.76.24 1.45.21 2 .13.61-.09 1.88-.77 2.15-1.51.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37Z" />
+                </svg>
+                WhatsApp owner
+              </a>
+            )}
             <p className="text-center text-sm">
               {t("booking.noCard")}
             </p>
