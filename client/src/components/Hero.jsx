@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { assets, cityList } from '../assets/assets'
 import { useAppContext } from '../Context/AppContext'
 import { useTranslation } from 'react-i18next'
+import { motion as Motion } from 'framer-motion'
 
 const Hero = () => {
   const { t } = useTranslation('common')
@@ -35,15 +36,28 @@ const Hero = () => {
   }
 
   return (
-    <div className='h-screen flex flex-col items-center justify-center gap-14 bg-light text-center transition-colors dark:bg-gray-950'>
+    <div className='flex min-h-screen flex-col items-center justify-center gap-10 bg-light px-4 py-28 text-center transition-colors dark:bg-gray-950 md:gap-14'>
 
       {/* Heading */}
-      <h1 className='text-4xl md:text-5xl font-semibold'>{t('hero.title')}</h1>
+      <Motion.h1
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className='text-4xl font-semibold md:text-5xl'
+      >
+        {t('hero.title')}
+      </Motion.h1>
 
       {/* Selection Form */}
-      <form onSubmit={handleSearch} className='flex flex-col md:flex-row items-start md:items-center justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0px_8px_20px_rgba(0,0,0,0.1)] transition-colors dark:border dark:border-slate-600 dark:bg-gray-800 dark:shadow-[0px_8px_24px_rgba(0,0,0,0.35)]'>
+      <Motion.form
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        onSubmit={handleSearch}
+        className='flex w-full max-w-80 flex-col items-start justify-between rounded-lg bg-white p-6 shadow-[0px_8px_20px_rgba(0,0,0,0.1)] transition-colors dark:border dark:border-slate-600 dark:bg-gray-800 dark:shadow-[0px_8px_24px_rgba(0,0,0,0.35)] md:max-w-200 md:flex-row md:items-center md:rounded-full'
+      >
 
-        <div className='flex flex-col md:flex-row items-start md:items-center gap-10 min-md:ml-8'>
+        <div className='flex flex-col items-start gap-6 md:ml-8 md:flex-row md:items-center md:gap-10'>
 
           {/* For pickupLocations */}
           <div className='flex flex-col items-start gap-2'>
@@ -71,15 +85,22 @@ const Hero = () => {
         </div>
 
         {/* Search Button */}
-        <button type="submit" className='flex items-center justify-center gap-1 px-9 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full'>
+        <Motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} type="submit" className='mt-6 flex items-center justify-center gap-1 rounded-full bg-blue-600 px-9 py-3 text-white hover:bg-blue-700 md:mt-0'>
           <img src={assets.search_icon} alt="search" className='brightness-300' />
           {t('hero.search')}
-        </button>
+        </Motion.button>
 
-      </form>
+      </Motion.form>
 
       {/* Car Image */}
-      <img src={assets.main_car} alt="Car Image" className='max-h-300px' />
+      <Motion.img
+        initial={{ y: 24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        src={assets.main_car}
+        alt="Car Image"
+        className='max-h-[300px] w-full max-w-2xl object-contain'
+      />
 
     </div>
   )

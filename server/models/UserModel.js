@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     resetOtpExpires: { type: Date },
     googleId: { type: String, default: "" },
     authProvider: { type: String, enum: ["local", "google", "both"], default: "local" },
+    whatsappNumber: { type: String, default: "" },
 }, { timestamps: true }
 );
 

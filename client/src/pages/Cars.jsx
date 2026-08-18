@@ -6,6 +6,7 @@ import { assets } from '../assets/assets'
 import CarCard from '../components/carCard'
 import { useAppContext } from '../Context/AppContext'
 import { useTranslation } from 'react-i18next'
+import { AnimatePresence, motion as Motion } from 'framer-motion'
 
 const Cars = () => {
   const [searchParams] = useSearchParams()
@@ -106,17 +107,20 @@ const Cars = () => {
   return (
     <div>
       <div className="flex flex-col items-center bg-light py-20 transition-colors dark:bg-gray-950 max-md:px-4">
-        <Title title={t('cars.availableTitle')} subTitle={t('cars.availableSubtitle')} />
+        <Motion.div initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.4 }}>
+          <Title title={t('cars.availableTitle')} subTitle={t('cars.availableSubtitle')} />
+        </Motion.div>
 
-        <div className="relative mt-6 flex h-12 w-full max-w-140 items-center rounded-full bg-white px-4 shadow dark:border dark:border-slate-600 dark:bg-gray-800 dark:shadow-[0px_10px_25px_rgba(0,0,0,0.35)]">
+        <Motion.div initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.4, delay: 0.1 }} className="relative mt-6 flex h-12 w-full max-w-140 items-center rounded-full bg-white px-4 shadow dark:border dark:border-slate-600 dark:bg-gray-800 dark:shadow-[0px_10px_25px_rgba(0,0,0,0.35)]">
           <img src={assets.search_icon} alt="" className="w-4.5 h-4.5 mr-2" />
           <input onChange={(event) => setInput(event.target.value)} value={input} type="text" placeholder={t('cars.searchPlaceholder')} className="cars-search-input h-full w-full bg-transparent text-gray-500 outline-none placeholder-gray-500 focus:outline-none focus:ring-0 dark:text-gray-200 dark:placeholder-gray-400" />
           <button type="button" onClick={() => setShowFilters((isOpen) => !isOpen)} aria-label={t('cars.showFilters')} aria-expanded={showFilters} className="cursor-pointer">
             <img src={assets.filter_icon} alt="" className="h-4.5 w-4.5" />
           </button>
 
+          <AnimatePresence>
           {showFilters && (
-            <div className="absolute right-0 top-14 z-10 w-72 rounded-xl bg-white p-4 text-left shadow-lg dark:border dark:border-slate-600 dark:bg-gray-800">
+            <Motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }} className="absolute right-0 top-14 z-10 w-72 rounded-xl bg-white p-4 text-left shadow-lg dark:border dark:border-slate-600 dark:bg-gray-800">
               <div className="mb-3 flex items-center justify-between">
                 <p className="font-medium text-gray-800 dark:text-gray-100">{t('cars.filterCars')}</p>
                 <button type="button" onClick={clearFilters} className="cursor-pointer text-sm text-primary">{t('cars.clear')}</button>
@@ -153,19 +157,20 @@ const Cars = () => {
                   <option value="price-high">{t('cars.priceHighLow')}</option>
                 </select>
               </label>
-            </div>
+            </Motion.div>
           )}
-        </div>
+          </AnimatePresence>
+        </Motion.div>
       </div>
 
       <div className="px-6 md:px-16 lg:px-24 xl:px-32 mt-10">
         <p className="mx-auto max-w-7xl text-gray-500 dark:text-gray-400 xl:px-20">{t('cars.showing', { count: filteredCars.length })}</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto">
+        <Motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.06 } } }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto">
           {filteredCars.map((car) => (
-            <div key={car._id}><CarCard car={car} /></div>
+            <Motion.div key={car._id} variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.3 }}><CarCard car={car} /></Motion.div>
           ))}
-        </div>
+        </Motion.div>
       </div>
     </div>
   )
