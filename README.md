@@ -4,6 +4,8 @@ Stat is a full-stack car-rental marketplace. Customers can discover vehicles, ch
 
 The project is a JavaScript MERN application: a React single-page application (SPA) and an Express API backed by MongoDB.
 
+**Live demo:** [statclient-gray.vercel.app](https://statclient-gray.vercel.app/)
+
 ## Contents
 
 - [Features](#features)
@@ -97,19 +99,66 @@ Pending reservations expire after `PENDING_BOOKING_EXPIRY_HOURS` (24 by default)
 Stat/
 ├── client/                         # React/Vite SPA
 │   ├── src/
-│   │   ├── components/             # Shared UI and route guards
-│   │   ├── Context/                # App and theme providers
-│   │   ├── locales/                # English and Hindi translations
-│   │   ├── pages/                  # Public customer pages
-│   │   └── pages/owner/            # Owner dashboard and management pages
+│   │   ├── assets/                 # Brand assets, vehicle images, and icons
+│   │   ├── components/             # Reusable customer-facing UI
+│   │   │   ├── owner/              # Owner navbar, sidebar, and titles
+│   │   │   ├── Banner.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Hero.jsx
+│   │   │   ├── Login.jsx           # Email, OTP, password-reset, Google flows
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── ProtectedRoute.jsx  # Customer/owner route access guard
+│   │   │   └── carCard.jsx
+│   │   ├── Context/
+│   │   │   ├── AppContext.jsx      # API, authentication, cars, booking dates
+│   │   │   └── ThemeContext.jsx    # Theme preference state
+│   │   ├── locales/
+│   │   │   ├── en/common.json      # English translation strings
+│   │   │   └── hi/common.json      # Hindi translation strings
+│   │   ├── pages/
+│   │   │   ├── owner/
+│   │   │   │   ├── AddCar.jsx
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── Layout.jsx
+│   │   │   │   ├── ManageBookings.jsx
+│   │   │   │   └── ManageCars.jsx
+│   │   │   ├── CarDetails.jsx
+│   │   │   ├── Cars.jsx
+│   │   │   ├── Home.jsx
+│   │   │   └── MyBookings.jsx
+│   │   ├── App.jsx                 # Route definitions and page shell
+│   │   ├── i18n.js                 # i18next initialization
+│   │   ├── index.css               # Global Tailwind styles
+│   │   └── main.jsx                # React entry point and providers
+│   ├── public/                     # Static public assets
+│   ├── package.json
 │   ├── vite.config.js
 │   └── vercel.json                 # SPA rewrite configuration
 ├── server/                         # Express API
-│   ├── configs/                    # Environment validation, MongoDB, ImageKit
-│   ├── Controllers/                # Authentication, owners, bookings, reviews
-│   ├── middleware/                 # JWT/session authorization and uploads
-│   ├── models/                     # Mongoose schemas
-│   ├── routes/                     # API endpoint definitions
+│   ├── configs/
+│   │   ├── config.js               # Required server environment validation
+│   │   ├── db.js                   # MongoDB connection
+│   │   └── imagekit.js             # ImageKit client
+│   ├── Controllers/
+│   │   ├── bookingController.js    # Availability, reservations, pickup location
+│   │   ├── ownerController.js      # Vehicle management and dashboard
+│   │   ├── reviewController.js     # Review creation and rating summaries
+│   │   └── userController.js       # Local/Google auth, OTPs, sessions
+│   ├── middleware/
+│   │   ├── auth.js                 # JWT/session and owner authorization
+│   │   └── multer.js               # Multipart upload handling
+│   ├── models/
+│   │   ├── BookingModel.js
+│   │   ├── CarModel.js
+│   │   ├── ReviewModel.js
+│   │   ├── SessionModel.js
+│   │   └── UserModel.js
+│   ├── routes/
+│   │   ├── bookingRoutes.js
+│   │   ├── ownerRoutes.js
+│   │   ├── reviewRoutes.js
+│   │   └── userRoutes.js
+│   ├── package.json
 │   ├── server.js                   # API bootstrap and route mounting
 │   └── vercel.json                 # Server deployment configuration
 ├── .gitignore
@@ -288,6 +337,7 @@ Authorization: Bearer <jwt>
 
 The repository contains separate Vercel configurations for client and server:
 
+- The live client is available at [statclient-gray.vercel.app](https://statclient-gray.vercel.app/).
 - Deploy `client/` as a Vercel project. Its rewrite sends unknown paths to the SPA entry point so React Router works on direct navigation.
 - Deploy `server/` as a separate Vercel project. Its configuration routes requests to `server.js`.
 - Configure the server environment variables in the server project and client `VITE_*` variables in the client project.
