@@ -1,4 +1,4 @@
-# Stat
+🚗 Stat
 
 Stat is a full-stack car-rental marketplace. Customers can discover vehicles, check date-specific availability, make reservations, share a pickup location for confirmed rentals, and review completed rentals. Registered users can become owners and manage listings, bookings, and dashboard metrics.
 
@@ -6,7 +6,7 @@ The project is a JavaScript MERN application: a React single-page application (S
 
 **Live demo:** [statclient-gray.vercel.app](https://statclient-gray.vercel.app/)
 
-## Contents
+📚 Contents
 
 - [Features](#features)
 - [Architecture](#architecture)
@@ -21,27 +21,27 @@ The project is a JavaScript MERN application: a React single-page application (S
 - [Deployment](#deployment)
 - [Security notes](#security-notes)
 
-## Features
+✨ Features
 
-### Customer experience
+🧑‍💻 Customer experience
 
-- Browse currently listed cars and view vehicle details.
-- Search available cars by location and rental date range.
-- Register with email verification OTP, sign in with email/password, or authenticate with Google.
-- Recover a password with a time-limited email OTP.
-- Create bookings, see booking history, and share a browser-provided pickup location after a booking is confirmed.
-- Review completed bookings once; each review updates the car's stored average rating and review count.
-- Use the interface in English or Hindi, with light/dark theme support.
+🚘 Browse currently listed cars and view vehicle details.
+🔎 Search available cars by location and rental date range.
+🔐 Register with email verification OTP, sign in with email/password, or authenticate with Google.
+🔑 Recover a password with a time-limited email OTP.
+📅 Create bookings, see booking history, and share a browser-provided pickup location after a booking is confirmed.
+⭐ Review completed bookings once; each review updates the car's stored average rating and review count.
+🌐 Use the interface in English or Hindi, with light/dark theme support.
 
-### Owner experience
+👑 Owner experience
 
-- Upgrade an authenticated customer account to an owner account.
-- Add cars with ImageKit image uploads, contact number, features, rental price, and location.
-- Toggle a listing's availability or retire it without deleting booking history.
-- Review incoming bookings and move them through the allowed lifecycle.
-- View dashboard totals for cars, bookings, pending/completed rentals, revenue, and recent bookings.
+👤 Upgrade an authenticated customer account to an owner account.
+🚙 Add cars with ImageKit image uploads, contact number, features, rental price, and location.
+🔄 Toggle a listing's availability or retire it without deleting booking history.
+📋 Review incoming bookings and move them through the allowed lifecycle.
+📊 View dashboard totals for cars, bookings, pending/completed rentals, revenue, and recent bookings.
 
-## Architecture
+🏗️ Architecture
 
 ```mermaid
 flowchart LR
@@ -57,15 +57,15 @@ flowchart LR
 
 The browser app renders pages, holds UI state, and attaches the JWT as an `Authorization: Bearer <token>` header. The API owns authorization, business rules, database access, email delivery, and media uploads.
 
-### Frontend design
+🎨 Frontend design
 
 `AppProvider` is the shared application state layer. It restores the saved session, loads public cars, configures Axios, and exposes authentication, date, and car state. `ThemeProvider` supplies theme state. React Router defines public routes plus the protected `/my-bookings` and `/owner/*` areas. The owner area uses nested routes inside its own layout.
 
-### Backend design
+⚙️ Backend design
 
 Routes are thin HTTP definitions; controllers contain feature logic; Mongoose models define persistence. The `protect` middleware validates both the signed JWT and its backing `Session` document, so logout or a password reset can revoke otherwise valid tokens. `requireOwner` protects owner-only operations.
 
-### Booking lifecycle
+🔄 Booking lifecycle
 
 ```mermaid
 stateDiagram-v2
@@ -80,7 +80,7 @@ stateDiagram-v2
 
 Pending reservations expire after `PENDING_BOOKING_EXPIRY_HOURS` (24 by default). Date-overlapping non-cancelled bookings prevent a car from being booked. A completed booking is required before its customer may submit a review.
 
-## Technology
+🛠️ Technology
 
 | Area | Tools |
 | --- | --- |
@@ -93,7 +93,7 @@ Pending reservations expire after `PENDING_BOOKING_EXPIRY_HOURS` (24 by default)
 | Internationalization | i18next and react-i18next (English/Hindi) |
 | Hosting configuration | Vercel |
 
-## Project structure
+📁 Project structure
 
 ```text
 Stat/
@@ -165,9 +165,9 @@ Stat/
 └── README.md
 ```
 
-## Getting started
+🚀 Getting started
 
-### Prerequisites
+📋 Prerequisites
 
 - Node.js 20 or later
 - A MongoDB database (Atlas or local)
@@ -175,7 +175,7 @@ Stat/
 - A Google Cloud OAuth client and Gmail OAuth2 refresh token for email OTP delivery
 - A Google OAuth web client for client-side Google Sign-In
 
-### 1. Clone and install dependencies
+1️⃣ Clone and install dependencies
 
 ```bash
 git clone <your-repository-url>
@@ -188,11 +188,11 @@ cd ../client
 npm install
 ```
 
-### 2. Configure environment variables
+2️⃣ Configure environment variables
 
 Create `server/.env` and `client/.env` using the templates in the next section. Do not commit either file.
 
-### 3. Start the API
+3️⃣ Start the API
 
 ```bash
 cd server
@@ -201,7 +201,7 @@ npm run server
 
 The API listens on `http://localhost:3000` unless `PORT` is set.
 
-### 4. Start the client
+4️⃣ Start the client
 
 In a second terminal:
 
@@ -212,9 +212,9 @@ npm run dev
 
 Vite will display the local client URL (normally `http://localhost:5173`). Set `VITE_BASE_URL` to the API URL, for example `http://localhost:3000`.
 
-## Configuration
+⚙️ Configuration
 
-### Server: `server/.env`
+🖥️ Server: server/.env
 
 ```dotenv
 # Required
@@ -240,7 +240,7 @@ PENDING_BOOKING_EXPIRY_HOURS=24
 
 `GOOGLE_CLIENT_ID` also validates the audience of Google ID tokens submitted through `/api/user/google-auth`. The email configuration checks for the Gmail values at application startup.
 
-### Client: `client/.env`
+💻 Client: client/.env
 
 ```dotenv
 VITE_BASE_URL=http://localhost:3000
@@ -250,20 +250,20 @@ VITE_GOOGLE_CLIENT_ID=<google-oauth-web-client-id>
 
 Vite exposes only values prefixed with `VITE_` to browser code. Never place database credentials, JWT secrets, ImageKit private keys, or Gmail credentials in the client environment file.
 
-## Application flows
+🔄 Application flows
 
-### Authentication and sessions
+🔐 Authentication and sessions
 
 1. Local registration creates an unverified user and sends a six-digit OTP that expires after 10 minutes.
 2. OTP verification, local login, or Google sign-in creates a `Session` record and signs a seven-day JWT containing the user and session IDs.
 3. Protected API calls validate the token and ensure its session is live, unrevoked, unexpired, and belongs to the token user.
 4. Logout revokes the current session. Password resets revoke every active session for that user.
 
-### Availability and price calculation
+📅 Availability and price calculation
 
 The availability endpoint only returns active listings at the requested location whose rental interval does not overlap a non-cancelled booking. Return dates are treated as checkout dates: a rental may begin on the same day another rental ends. The booking total is calculated server-side as `pricePerDay × ceil(rental duration in days)`.
 
-## API reference
+🔌 API reference
 
 All request and response bodies are JSON unless noted otherwise. Protected endpoints require:
 
@@ -271,7 +271,7 @@ All request and response bodies are JSON unless noted otherwise. Protected endpo
 Authorization: Bearer <jwt>
 ```
 
-### User endpoints
+👤 User endpoints
 
 | Method | Endpoint | Auth | Purpose |
 | --- | --- | --- | --- |
@@ -287,7 +287,7 @@ Authorization: Bearer <jwt>
 | GET | `/api/user/data` | Yes | Get the signed-in user's safe profile fields |
 | GET | `/api/user/cars` | No | List active cars, including owner WhatsApp contact |
 
-### Booking and review endpoints
+📅 Booking and review endpoints
 
 | Method | Endpoint | Auth | Purpose |
 | --- | --- | --- | --- |
@@ -300,7 +300,7 @@ Authorization: Bearer <jwt>
 | POST | `/api/reviews` | Yes | Add a review to the user's completed booking |
 | GET | `/api/reviews/car/:carId` | No | Get reviews and summary for one car |
 
-### Owner endpoints
+👑 Owner endpoints
 
 | Method | Endpoint | Auth | Purpose |
 | --- | --- | --- | --- |
@@ -312,7 +312,7 @@ Authorization: Bearer <jwt>
 | GET | `/api/owner/dashboard` | Owner | Get owner summary metrics and recent bookings |
 | POST | `/api/owner/update-image` | Owner | Upload a profile image; multipart field name: `image` |
 
-## Data model
+🗃️ Data model
 
 | Collection | Main fields | Relationships |
 | --- | --- | --- |
@@ -322,7 +322,7 @@ Authorization: Bearer <jwt>
 | `bookings` | car, customer, owner, dates, status, expiry, total price, pickup coordinates | Connects a customer and an owner's car |
 | `reviews` | car, user, booking, rating, comment | One review per booking; contributes to car rating summary |
 
-## Scripts
+📜 Scripts
 
 | Directory | Command | Description |
 | --- | --- | --- |
@@ -333,7 +333,7 @@ Authorization: Bearer <jwt>
 | `client` | `npm run preview` | Preview the production client build locally |
 | `client` | `npm run lint` | Run ESLint across the client source |
 
-## Deployment
+☁️ Deployment
 
 The repository contains separate Vercel configurations for client and server:
 
@@ -343,7 +343,7 @@ The repository contains separate Vercel configurations for client and server:
 - Configure the server environment variables in the server project and client `VITE_*` variables in the client project.
 - Set `VITE_BASE_URL` to the deployed API origin. Ensure the API CORS policy permits the deployed client origin before production use.
 
-## Security notes
+🔒 Security notes
 
 - Passwords and OTPs are hashed using bcrypt; raw values are not stored.
 - OTPs are short-lived, and both verification and reset values are cleared after use.
@@ -351,6 +351,6 @@ The repository contains separate Vercel configurations for client and server:
 - Owner actions are enforced by backend middleware, not solely by route visibility in the client.
 - ImageKit private credentials and all other secrets belong only in the server environment.
 
-## License
+📄 License
 
 No license is currently specified for this repository.
